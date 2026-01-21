@@ -1,9 +1,13 @@
 import React from 'react'
+import './header.css'
+
 const Header = () => {
   return (
-    <div>
-        <h1>Youtube Content Manager</h1>
-    </div>
+    <header className="header">
+      <div className="header-container">
+        <h1 className="header-logo">Youtube Content Manager</h1>
+      </div>
+    </header>
   )
 }
 
