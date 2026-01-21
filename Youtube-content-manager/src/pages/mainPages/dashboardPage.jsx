@@ -58,44 +58,49 @@ const DashboardPage = () => {
         <>
         <Header />
         <div className='dashboard-page'>
+            
+            <div className='dashboard-grid'>
             {data.map(item => {
-               return( <div key={item.id} className='dashboard-container'>
-                <div className='header-dashboard'>
-                    <h1>{item.type} vedio</h1>
-                    {item.uploaded ? <p> uploaded</p> : <p>ToBeUplaod</p>}
+               return( <div key={item.id} className='dashboard-card'>
+                <div className='card-badge'>
+                    <span className={`pill ${item.type === "Short" ? 'pill-short' : 'pill-long'}`}>{item.type}</span>
+                    <span className={`pill ${item.uploaded ? 'pill-live' : 'pill-draft'}`}>{item.uploaded ? 'Uploaded' : 'Draft'}</span>
                 </div>
-
-                <div className='content-dashboard'>
-                    <p>{item.title}</p>
-                    {item.uploaded ? <p>{item.publishDate} : {item.publishTime}</p> :''}
-                    {item.uploaded && (
-                        <>
-                        <p>{item.publishDate} : {item.publishTime}</p>
-                        <p>Youtube Link:{item.videoUrl}</p>
-                        </>
-                    )}
-
+                <div className='card-content'>
+                    <h3>{item.title}</h3>
+                    <p className='muted'>{item.description}</p>
+                    <div className='meta'>
+                        
+                        <p><strong>Platform:</strong> {item.platform}</p>
+                        {item.uploaded && (<p><strong>Published:</strong>{item.publishDate} at {item.publishTime}</p>)}
+                        {!item.uploaded && (<p><strong>Scheduled:</strong> {item.publishDate} at {item.publishTime ? item.publishTime : ''}</p>)}
+                        
+                    </div>
                     
-
+                    {item.hashtags?.length > 0 && (
+                        <div className='tags'>
+                            {item.hashtags.map(tag => <span key={tag}>{tag}</span>)}
+                        </div>
+                    )}
+                    {item.uploaded && item.videoUrl && (
+                        <a className='link' href={item.videoUrl} target='_blank' rel='noreferrer'>View on YouTube →</a>
+                    )}
                 </div>
-                <div className='dashboard-footer'>
-                    {!item.uploaded && <button>
+                <div className='card-actions'>
+                    {!item.uploaded && <button className='ghost danger'>
                         Delete
                     </button> }
-                    <button>
+                    <button className='ghost'>
                         Edit
                     </button>
                     
-                    <button>
+                    <button className='primary'>
                         View
                     </button>
                 </div>
             </div>)
             })}
-            
-
-           
-
+            </div>
         </div>
 
         </>
