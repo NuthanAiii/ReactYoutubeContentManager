@@ -28,3 +28,27 @@ a {
 button, input {
   font-family: inherit;
 }
+
+/* Mobile Responsive Global Styles */
+@media (max-width: 768px) {
+  body {
+    font-size: 15px;
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+
+  /* Prevent text size adjustment on iOS */
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}

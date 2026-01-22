@@ -1,7 +1,30 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './dashboardPage.css'
 import Header from '../../layouts/header'
+import Addcontent from './addContent'
+
 const DashboardPage = () => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editItem, setEditItem] = useState(null);
+    const [viewClicked, setViewClicked] = useState(false);
+    
+    const handleEdit = (item, view = false) => {
+        setEditItem(item);
+        setViewClicked(view); // Set view mode based on parameter
+        setIsModalOpen(true);
+    }
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setEditItem(null); // Reset edit item when closing
+        setViewClicked(false); // Reset view mode when closing
+    }
+
+    const handleAddContent = () => {
+        setEditItem(null); // Ensure no edit item when adding new
+        setViewClicked(false); // Ensure not in view mode when adding new
+        setIsModalOpen(true);
+    }
 
     const data = [
         {
@@ -90,11 +113,11 @@ const DashboardPage = () => {
                     {!item.uploaded && <button className='ghost danger'>
                         Delete
                     </button> }
-                    <button className='ghost'>
+                    <button className='ghost' onClick={() => handleEdit(item)}>
                         Edit
                     </button>
                     
-                    <button className='primary'>
+                    <button className='primary' onClick={() => handleEdit(item,true)}>
                         View
                     </button>
                 </div>
@@ -102,6 +125,14 @@ const DashboardPage = () => {
             })}
             </div>
         </div>
+        <div className="add-content-button-container">
+            <button className="add-content-button" onClick={handleAddContent}>
+                <span className="add-content-icon">+</span>
+                Add Content
+            </button>
+        </div>
+
+        {isModalOpen && <Addcontent onClose={handleCloseModal} editItem={editItem} view ={viewClicked} />}
 
         </>
     )
