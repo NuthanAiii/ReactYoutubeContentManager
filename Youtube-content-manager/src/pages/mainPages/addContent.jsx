@@ -1,26 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import './addContent.css';
+import { useForm } from "react-hook-form";
 
 const Addcontent = ({ onClose, editItem, view }) => {
-    const [formData, setFormData] = useState({
-        title: '',
-        type: 'Short',
-        script: '',
-        publishDate: '',
-        publishTime: '',
-        platform: 'YouTube',
-        uploaded: false
+    const {
+        register: contentForm,
+        handleSubmit: addContent,
+        watch: watchContent,
+        reset: resetAddContent,
+        formState: { errors, isValid, touchedFields }
+    } = useForm({
+        mode: 'onChange',
+        defaultValues: {
+            title: '',
+            type: 'Short',
+            script: '',
+            publishDate: '',
+            publishTime: '',
+            platform: 'YouTube',
+            uploaded: false
+        }
     });
 
-    // Use useEffect to populate form when editItem changes
     useEffect(() => {
         if (editItem) {
-            setFormData({
-                ...formData, ...editItem
-            });
+            resetAddContent(editItem);
         } else {
-            // Reset form when not editing
-            setFormData({
+            resetAddContent({
                 title: '',
                 type: 'Short',
                 script: '',
@@ -30,23 +36,11 @@ const Addcontent = ({ onClose, editItem, view }) => {
                 uploaded: false
             });
         }
-    }, [editItem]);
+    }, [editItem, resetAddContent]);
 
-    const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-
-        setFormData({
-            ...formData,
-            [name]: type === 'checkbox' ? checked : value
-        });
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (view) return; // Don't submit in view mode
-        console.log('Form submitted:', formData);
-        // Handle form submission here
-        // After successful submission, you might want to close the modal
+    const onSubmit = (data) => {
+        if (view) return;
+        console.log('Form submitted:', data);
         onClose();
     };
 
@@ -70,48 +64,54 @@ const Addcontent = ({ onClose, editItem, view }) => {
                         </p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="content-form">
+                    <form onSubmit={addContent(onSubmit)} className="content-form">
                         {/* Title Field */}
                         <div className="form-group">
                             <label htmlFor="title">Title <span className="required">*</span></label>
                             <input
                                 type="text"
                                 id="title"
-                                name="title"
                                 placeholder="Enter video title"
-                                value={formData.title}
-                                onChange={handleChange}
+                                {...contentForm('title', {
+                                    required: 'Please Enter the Title',
+                                    minLength: {
+                                        value: 3,
+                                        message: 'At least 3 characters are required for the title!'
+                                    }
+                                })}
                                 disabled={view}
-                                required
                             />
+                            {touchedFields.title && errors.title && (
+                            <span className="error-message">{errors.title.message}</span>
+                        )}
                         </div>
+                        
 
                         {/* Type Selection */}
                         <div className="form-group">
                             <label>Content Type <span className="required">*</span></label>
                             <div className="type-selector">
-                                <label className={`type-option type-short ${formData.type === 'Short' ? 'active' : ''}`}>
+                                <label className={`type-option type-short ${watchContent('type') === 'Short' ? 'active' : ''}`}>
                                     <input
                                         type="radio"
-                                        name="type"
                                         value="Short"
                                         disabled={view}
-                                        checked={formData.type === 'Short'}
-                                        onChange={handleChange}
+                                        {...contentForm('type', { required: 'Please select Type of content' })}
                                     />
                                     <span>Short</span>
                                 </label>
-                                <label className={`type-option type-long ${formData.type === 'Long' ? 'active' : ''}`}>
+                                <label className={`type-option type-long ${watchContent('type') === 'Long' ? 'active' : ''}`}>
                                     <input
                                         type="radio"
-                                        name="type"
                                         value="Long"
                                         disabled={view}
-                                        checked={formData.type === 'Long'}
-                                        onChange={handleChange}
+                                        {...contentForm('type')}
                                     />
                                     <span>Long</span>
                                 </label>
+                                {touchedFields.type && errors.type && (
+                                    <span className="error-message">{errors.type.message}</span>
+                                )}
                             </div>
                         </div>
 
@@ -120,10 +120,8 @@ const Addcontent = ({ onClose, editItem, view }) => {
                             <label htmlFor="script">Script</label>
                             <textarea
                                 id="script"
-                                name="script"
                                 placeholder="Enter your video script here..."
-                                value={formData.script}
-                                onChange={handleChange}
+                                {...contentForm('script')}
                                 rows="8"
                                 disabled={view}
                             />
@@ -136,10 +134,8 @@ const Addcontent = ({ onClose, editItem, view }) => {
                                 <input
                                     type="date"
                                     id="publishDate"
-                                    name="publishDate"
-                                    value={formData.publishDate}
+                                    {...contentForm('publishDate')}
                                     disabled={view}
-                                    onChange={handleChange}
                                 />
                             </div>
                             <div className="form-group">
@@ -147,10 +143,8 @@ const Addcontent = ({ onClose, editItem, view }) => {
                                 <input
                                     type="time"
                                     id="publishTime"
-                                    name="publishTime"
-                                    value={formData.publishTime}
+                                    {...contentForm('publishTime')}
                                     disabled={view}
-                                    onChange={handleChange}
                                 />
                             </div>
                         </div>
@@ -160,17 +154,17 @@ const Addcontent = ({ onClose, editItem, view }) => {
                             <label htmlFor="platform">Platform <span className="required">*</span></label>
                             <select
                                 id="platform"
-                                name="platform"
-                                value={formData.platform}
-                                onChange={handleChange}
+                                {...contentForm('platform', { required: 'Please select a platform' })}
                                 disabled={view}
-                                required
                             >
                                 <option value="YouTube">YouTube</option>
                                 <option value="Instagram">Instagram</option>
                                 <option value="TikTok">TikTok</option>
                                 <option value="Facebook">Facebook</option>
                             </select>
+                            {touchedFields.platform && errors.platform && (
+                                <span className="error-message">{errors.platform.message}</span>
+                            )}
                         </div>
 
                         {/* Uploaded Checkbox */}
@@ -178,10 +172,8 @@ const Addcontent = ({ onClose, editItem, view }) => {
                             <label className="checkbox-label">
                                 <input
                                     type="checkbox"
-                                    name="uploaded"
+                                    {...contentForm('uploaded')}
                                     disabled={view}
-                                    checked={formData.uploaded}
-                                    onChange={handleChange}
                                 />
                                 <span className="checkmark"></span>
                                 <span className="checkbox-text">Mark as uploaded</span>
@@ -194,7 +186,11 @@ const Addcontent = ({ onClose, editItem, view }) => {
                                {view ? 'Close' : 'Cancel'}
                            </button>
                            {!view && (
-                               <button type="submit" className="primary">
+                               <button
+                                   type="submit"
+                                   className="primary"
+                                   disabled={ !isValid}
+                               >
                                    {editItem ? 'Update Content' : 'Create Content'}
                                </button>
                            )}
