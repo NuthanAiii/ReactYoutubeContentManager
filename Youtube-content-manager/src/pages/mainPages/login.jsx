@@ -8,7 +8,7 @@ const LoginPage = () => {
     
     const {
         register: loginform,
-        handleSubmit,
+        handleSubmit:login,
         formState: { errors, isValid, touchedFields }
     } = useForm({
         mode: 'onChange', // Validate on change
@@ -33,7 +33,7 @@ const LoginPage = () => {
                     <h1>Login</h1>
                     <p className='subtext'>Manage your ideas and uploads in one place.</p>
                 </div>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={login(onSubmit)}>
                     <div className='form-group'>
                         <label htmlFor="userName">Username</label>
                         <input 
