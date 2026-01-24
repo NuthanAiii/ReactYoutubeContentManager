@@ -20,6 +20,7 @@ const LoginPage = () => {
 
     const onSubmit = (data) => {
         console.log('login', data);
+        sessionStorage.setItem("login", true)
         // Reset form after login
         navigate('/dashboard');
     }
