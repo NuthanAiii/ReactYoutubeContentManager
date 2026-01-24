@@ -1,0 +1,4 @@
+{
+    "python.defaultInterpreterPath": "${workspaceFolder}/fastapi-be-ycm/fastapi-venv/bin/python",
+    "python.terminal.activateEnvironment": true
+}
