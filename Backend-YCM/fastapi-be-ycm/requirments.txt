@@ -1,2 +1,10 @@
 fastapi
 uvicorn
+sqlalchemy
+# pin to versions that are compatible with passlib's bcrypt backend
+passlib==1.7.4
+bcrypt==4.0.1
+python-jose[cryptography]
+cryptography
+python-jose
+python-multipart
