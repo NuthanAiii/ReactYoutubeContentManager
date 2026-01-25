@@ -1,5 +1,5 @@
 import email
-from .database import Base
+from database import Base
 from sqlalchemy import Boolean, Column, Integer, String, table, true
 # over all this fine model is used to create the table
 class Data(Base):
@@ -22,8 +22,8 @@ class Data(Base):
 class User(Base):
     __tablename__="User"
     id=Column(Integer, primary_key=True, index=True)
-    name = Column(String, Index= True)
-    email = Column(String, Index= True)
-    password = Column(String, Index=True)
+    name = Column(String, index=True)
+    email = Column(String, index=True)
+    password = Column(String, index=True)
 
           

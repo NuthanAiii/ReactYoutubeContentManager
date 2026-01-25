@@ -18,17 +18,18 @@ class GetUser(BaseModel):
         from_attributes = True
 
 class Content(BaseModel):
-    title =str
-    description=str
-    type=str
-    category=str
-    uploaded=bool
-    script=str
-    hashtags=str
-    thumbnailUrl=str
-    platform=str
-    videoUrl=str
-    publishDate=str
+    title: str
+    description: str
+    type: str
+    category: str
+    uploaded: bool
+    script: str
+    hashtags: str
+    thumbnailUrl: str
+    platform: str
+    videoUrl: str
+    publishDate: str
+    publishTime: Optional[str] = ""
 
 class GetContent(Content):
     class Config():
@@ -38,4 +39,4 @@ class Login(BaseModel):
     email:str
     password:str
 
-    
+
