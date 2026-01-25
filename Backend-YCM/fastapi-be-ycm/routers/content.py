@@ -9,13 +9,13 @@ from routers.outh2 import get_current_user
 router = APIRouter(tags=['content'])
 
 @router.get('/getContent', response_model=list[schemas.GetContent])
-def getContent(db: Session = Depends(get_db), current_user: schemas.User = Depends(get_current_user)):
+def getContent(db: Session = Depends(get_db), user: schemas.GetUser = Depends(get_current_user)):
     content = db.query(models.Data).all()
     return content
 
 
 @router.post("/setContent")
-def setContent(req: schemas.Content, db: Session = Depends(get_db), current_user: schemas.User = Depends(get_current_user) ):
+def setContent(req: schemas.Content, db: Session = Depends(get_db), user: schemas.GetUser = Depends(get_current_user) ):
     new_content = models.Data(
         **req.model_dump()
     )
