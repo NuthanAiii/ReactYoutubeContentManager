@@ -2,6 +2,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom'
 import './login.css'
+import * as apiCallSerive from '../../services/apiCallSerive';
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -18,11 +19,17 @@ const LoginPage = () => {
         }
     });
 
-    const onSubmit = (data) => {
-        console.log('login', data);
-        sessionStorage.setItem("login", true)
-        // Reset form after login
-        navigate('/dashboard');
+    const onSubmit = async(data) => {
+        try{
+            const res = await apiCallSerive.postData('login', data);
+            sessionStorage.setItem('authToken', res.token);
+            navigate('/dashboard');
+        }
+        catch(err){
+            console.error('Login failed:', err);
+        }
+      
+       
     }
 
 
