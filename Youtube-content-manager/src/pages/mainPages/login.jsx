@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom' 
 import './login.css'
 import * as apiCallSerive from '../../services/apiCallSerive';
 import { toast } from 'react-toastify';
@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 
 const LoginPage = () => {
     const navigate = useNavigate();
+    const [isSignUp, setIsSignUp] = useState(false);
 
     const {
         register: loginform,
@@ -17,6 +18,7 @@ const LoginPage = () => {
     } = useForm({
         mode: 'onChange', // Validate on change
         defaultValues: {
+            name: '',
             userName: '',
             password: ''
         }
@@ -24,22 +26,44 @@ const LoginPage = () => {
 
     const onSubmit = async (data) => {
         try {
-            const params = new URLSearchParams();
-            params.append("username", data.userName);
-            params.append("password", data.password);
-            const res = await apiCallSerive.postData('login', params);
-            sessionStorage.setItem('authToken', res.access_token);
-            toast.success('Login successful');
-            loginReset();
-            navigate('/dashboard', { replace: true } );
+            let params;
+            if (!isSignUp) {
+                 params = new URLSearchParams();
+                params.append("username", data.userName);
+                params.append("password", data.password);
+            }
+            else{
+                params = {
+                    name: data.name,
+                    email: data.userName,
+                    password: data.password
+                };
+            }
+            
+
+            const endpoint = isSignUp ? 'signIn' : 'login';
+            const res = await apiCallSerive.postData(endpoint, params);
+
+            // If API returns access token, auto-login
+            if (res?.access_token) {
+                sessionStorage.setItem('authToken', res.access_token);
+                toast.success(isSignUp ? 'Account created. Logged in!' : 'Login successful');
+                loginReset();
+                navigate('/dashboard', { replace: true });
+            } else {
+                // Created but no token - ask user to login
+                toast.success(isSignUp ? 'Account created. Please login.' : 'Login successful');
+                loginReset();
+                if (isSignUp) setIsSignUp(false);
+                if (!isSignUp) navigate('/dashboard', { replace: true });
+            }
         }
         catch (err) {
             loginReset();
-            const message = err?.response?.data?.detail || err.message || 'Login failed';
-            console.error('Login failed:', message);
+            const message = err?.response?.data?.detail || err.message || (isSignUp ? 'Sign up failed' : 'Login failed');
+            console.error('Auth failed:', message);
             toast.error(message);
         }
-
 
     }
 
@@ -49,10 +73,30 @@ const LoginPage = () => {
             <div className='login-card'>
                 <div className='login-header'>
                     <p className='eyebrow'>Access your workspace</p>
-                    <h1>Login</h1>
+                   {isSignUp ? <h1> Sign In</h1> : <h1>Login</h1>} 
                     <p className='subtext'>Manage your ideas and uploads in one place.</p>
                 </div>
                 <form onSubmit={login(onSubmit)}>
+{isSignUp && (
+                    <div className='form-group'>
+                        <label htmlFor="name">Name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            {...loginform('name', {
+                                required: 'Name is required',
+                                minLength: { value: 2, message: 'Name must be at least 2 characters' },
+                                validate: (value) => value.trim() ? true : 'Name is required'
+                            })}
+                            placeholder="Enter full name"
+                            className={touchedFields.name && errors.name ? 'input-error' : ''}
+                        />
+                        {touchedFields.name && errors.name && (
+                            <span className="error-message">{errors.name.message}</span>
+                        )}
+                    </div>
+                    )}
+
                     <div className='form-group'>
                         <label htmlFor="userName">Username</label>
                         <input
@@ -77,7 +121,7 @@ const LoginPage = () => {
                         {touchedFields.userName && errors.userName && (
                             <span className="error-message">{errors.userName.message}</span>
                         )}
-                    </div>
+                    </div> 
                     <div className='form-group'>
                         <label htmlFor="password">Password</label>
                         <input
@@ -102,10 +146,18 @@ const LoginPage = () => {
                         className='primary'
                         disabled={!isValid}
                     >
-                        Login
+                        {isSignUp ? 'Sign Up' : 'Login'}
                     </button>
                 </form>
-                <p className='hint'>Demo flow: click login to view the dashboard.</p>
+                <div className='form-footer'>
+                    <p className='toggle'>
+                        {isSignUp ? 'Already have an account?' : "Don't have an account?"}
+                        <button type='button' className='link' onClick={() => { setIsSignUp(!isSignUp); loginReset(); }}>
+                            {isSignUp ? ' Login' : ' Sign Up'}
+                        </button>
+                    </p>
+                    <p className='hint'>{isSignUp ? 'Create your account to start managing content.' : 'Demo flow: click login to view the dashboard.'}</p>
+                </div>
             </div>
         </div>
     )
