@@ -3,13 +3,16 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom'
 import './login.css'
 import * as apiCallSerive from '../../services/apiCallSerive';
+import { toast } from 'react-toastify';
+
 
 const LoginPage = () => {
     const navigate = useNavigate();
-    
+
     const {
         register: loginform,
-        handleSubmit:login,
+        handleSubmit: login,
+        reset:loginReset,
         formState: { errors, isValid, touchedFields }
     } = useForm({
         mode: 'onChange', // Validate on change
@@ -19,21 +22,29 @@ const LoginPage = () => {
         }
     });
 
-    const onSubmit = async(data) => {
-        try{
-            const res = await apiCallSerive.postData('login', data);
-            sessionStorage.setItem('authToken', res.token);
-            navigate('/dashboard');
+    const onSubmit = async (data) => {
+        try {
+            const params = new URLSearchParams();
+            params.append("username", data.userName);
+            params.append("password", data.password);
+            const res = await apiCallSerive.postData('login', params);
+            sessionStorage.setItem('authToken', res.access_token);
+            toast.success('Login successful');
+            loginReset();
+            navigate('/dashboard', { replace: true } );
         }
-        catch(err){
-            console.error('Login failed:', err);
+        catch (err) {
+            loginReset();
+            const message = err?.response?.data?.detail || err.message || 'Login failed';
+            console.error('Login failed:', message);
+            toast.error(message);
         }
-      
-       
+
+
     }
 
 
-    return(
+    return (
         <div className='login-page'>
             <div className='login-card'>
                 <div className='login-header'>
@@ -44,8 +55,8 @@ const LoginPage = () => {
                 <form onSubmit={login(onSubmit)}>
                     <div className='form-group'>
                         <label htmlFor="userName">Username</label>
-                        <input 
-                            type="text" 
+                        <input
+                            type="text"
                             id="userName"
                             {...loginform('userName', {
                                 required: 'Username is required',
@@ -69,8 +80,8 @@ const LoginPage = () => {
                     </div>
                     <div className='form-group'>
                         <label htmlFor="password">Password</label>
-                        <input 
-                            type="password" 
+                        <input
+                            type="password"
                             id="password"
                             {...loginform('password', {
                                 required: 'Password is required',
@@ -86,9 +97,9 @@ const LoginPage = () => {
                             <span className="error-message">{errors.password.message}</span>
                         )}
                     </div>
-                    <button 
+                    <button
                         type="submit"
-                        className='primary' 
+                        className='primary'
                         disabled={!isValid}
                     >
                         Login

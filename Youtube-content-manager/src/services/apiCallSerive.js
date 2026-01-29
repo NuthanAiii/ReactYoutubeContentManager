@@ -1,24 +1,39 @@
 import axios from "axios";
 
-const API_BASE_URL = "https://api.example.com";
+const API_BASE_URL = "http://127.0.0.1:8000";
 const api = axios.create({
     baseURL: API_BASE_URL,
-    headers: {
-        'Content-Type': 'application/json',
-    },
+    
 })
 
-api.interceptors.request.use((config) =>{
+api.interceptors.request.use((config) => {
     const token = sessionStorage.getItem('authToken');
-    if(token){
+    if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
 
 })
 
-export const fetchData = async (endpoint) => {
+const createConfig = (data) =>{
+    const headers = {};
+
+    if (data instanceof FormData) {
+      // For FormData, do NOT set Content-Type so browser/axios can set the boundary
+    } else if (data instanceof URLSearchParams) {
+      headers['Content-Type'] = 'application/x-www-form-urlencoded';
+    } else {
+      headers['Content-Type'] = 'application/json';
+    }
+
+    return headers;
+
+
+}
+
+export const fetchData = async (endpoint,) => {
   try {
+    
     const response = await api.get(endpoint);
     return response.data;
   } catch (error) {
@@ -27,12 +42,16 @@ export const fetchData = async (endpoint) => {
   }
 };
 
+
 export const postData = async (endpoint, data) => {
   try {
-    const response = await api.post(endpoint, data);
+    // Build headers purely from 'data' (no config param expected)
+    const headers = createConfig(data);
+
+    const response = await api.post(endpoint, data, { headers });
     return response.data;
   } catch (error) {
-    console.error("Error posting data:", error);
+    
     throw error;
   }
 };

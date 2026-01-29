@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './dashboardPage.css'
 import Header from '../../layouts/header'
 import Addcontent from './addContent'
@@ -8,6 +8,21 @@ const DashboardPage = () => {
     const [editItem, setEditItem] = useState(null);
     const [viewClicked, setViewClicked] = useState(false);
     
+    // Prevent back navigation into login/welcome while user is authenticated
+    useEffect(() => {
+        const onPopState = () => {
+            if (sessionStorage.getItem('authToken')) {
+                // Keep user on the same dashboard entry
+                window.history.pushState(null, '', window.location.href);
+            }
+        };
+
+        // Seed the history state so the first Back triggers popstate
+        window.history.pushState(null, '', window.location.href);
+        window.addEventListener('popstate', onPopState);
+        return () => window.removeEventListener('popstate', onPopState);
+    }, []);
+
     const handleEdit = (item, view = false) => {
         setEditItem(item);
         setViewClicked(view); // Set view mode based on parameter
