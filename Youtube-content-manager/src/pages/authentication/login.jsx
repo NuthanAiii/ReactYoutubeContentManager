@@ -4,15 +4,18 @@ import { useNavigate } from 'react-router-dom'
 import './login.css'
 import * as apiCallSerive from '../../services/apiCallSerive';
 import { toast } from 'react-toastify';
+import { useSelector, useDispatch } from 'react-redux';
+import { login } from '../../slices/authSlice';
 
 
 const LoginPage = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [isSignUp, setIsSignUp] = useState(false);
 
     const {
         register: loginform,
-        handleSubmit: login,
+        handleSubmit: userLogin,
         reset:loginReset,
         formState: { errors, isValid, touchedFields }
     } = useForm({
@@ -46,6 +49,10 @@ const LoginPage = () => {
 
             // If API returns access token, auto-login
             if (res?.access_token) {
+                // store token in session and minimal user info in redux
+                const userPayload = { username: data.userName, token: res.access_token };
+                dispatch(login(userPayload))
+
                 sessionStorage.setItem('authToken', res.access_token);
                 toast.success(isSignUp ? 'Account created. Logged in!' : 'Login successful');
                 loginReset();
@@ -76,7 +83,7 @@ const LoginPage = () => {
                    {isSignUp ? <h1> Sign In</h1> : <h1>Login</h1>} 
                     <p className='subtext'>Manage your ideas and uploads in one place.</p>
                 </div>
-                <form onSubmit={login(onSubmit)}>
+                <form onSubmit={userLogin(onSubmit)}>
 {isSignUp && (
                     <div className='form-group'>
                         <label htmlFor="name">Name</label>
