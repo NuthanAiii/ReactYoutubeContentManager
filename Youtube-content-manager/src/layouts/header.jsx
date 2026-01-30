@@ -8,7 +8,7 @@ import { logOut } from '../slices/authSlice'
 const Header = () => {
   const [open, setOpen] = useState(false)
   const dispatch = useDispatch()
-  const user = useSelector((state) => state.auth.userDetails)
+  const user = useSelector((state) => state.login.userDetails)
   const ref = useRef(null)
   const navigate = useNavigate()
 
