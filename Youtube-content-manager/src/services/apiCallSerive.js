@@ -31,7 +31,7 @@ const createConfig = (data) =>{
 
 }
 
-export const fetchData = async (endpoint,) => {
+export const fetchData = async (endpoint) => {
   try {
     
     const response = await api.get(endpoint);

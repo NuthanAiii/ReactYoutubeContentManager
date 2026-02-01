@@ -5,7 +5,8 @@ import './login.css'
 import * as apiCallSerive from '../../services/apiCallSerive';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
-import { login } from '../../slices/authSlice';
+import { loginAsync } from '../../slices/authSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 
 const LoginPage = () => {
@@ -44,25 +45,33 @@ const LoginPage = () => {
             }
             
 
-            const endpoint = isSignUp ? 'signIn' : 'login';
-            const res = await apiCallSerive.postData(endpoint, params);
-
-            // If API returns access token, auto-login
-            if (res?.access_token) {
-                // store token in session and minimal user info in redux
-                const userPayload = { username: data.userName, token: res.access_token };
-                dispatch(login(userPayload))
-
-                sessionStorage.setItem('authToken', res.access_token);
-                toast.success(isSignUp ? 'Account created. Logged in!' : 'Login successful');
-                loginReset();
-                navigate('/dashboard', { replace: true });
+            if (isSignUp) {
+                const res = await apiCallSerive.postData('signIn', params);
+                // Created but no token - ask user to login or handle response
+                if (res?.access_token) {
+                    sessionStorage.setItem('authToken', res.access_token);
+                    toast.success('Account created and logged in');
+                    loginReset();
+                    navigate('/dashboard', { replace: true });
+                } else {
+                    toast.success('Account created. Please login.');
+                    loginReset();
+                    setIsSignUp(false);
+                }
             } else {
-                // Created but no token - ask user to login
-                toast.success(isSignUp ? 'Account created. Please login.' : 'Login successful');
-                loginReset();
-                if (isSignUp) setIsSignUp(false);
-                if (!isSignUp) navigate('/dashboard', { replace: true });
+                // Use async thunk for login
+                try {
+                    const action = await dispatch(loginAsync({ username: data.userName, password: data.password }));
+                    const result = unwrapResult(action);
+                    // result is { username, token }
+                    sessionStorage.setItem('authToken', result.token);
+                    toast.success('Login successful');
+                    loginReset();
+                    navigate('/dashboard', { replace: true });
+                } catch (thunkErr) {
+                    const message = thunkErr || 'Login failed';
+                    toast.error(message);
+                }
             }
         }
         catch (err) {

@@ -48,9 +48,9 @@
 }
 
 .dashboard-grid {
-  display: flex;
-  
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
 }
 
 .dashboard-card {
@@ -63,7 +63,8 @@
   gap: 16px;
   box-shadow: 0 14px 50px rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(10px);
-  width: 22%;
+  width: 100%;
+  min-height: 140px;
 }
 
 .card-badge {
@@ -204,9 +205,9 @@
     padding: 9px 12px;
     width:250px;
 }
+/* Keep the main page layout default (no forced flex) so grid can size properly */
 .dashboard-page{
-    display: flex;
-    gap: 2%;
+    /* intentionally left without display:flex to allow .dashboard-grid to control layout */
 }
 .header-dashboard h1{
     margin: 0;
