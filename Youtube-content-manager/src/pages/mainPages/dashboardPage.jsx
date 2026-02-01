@@ -6,6 +6,7 @@ import DeleteAlert from '../../components/deleteAlert'
 import { toast } from 'react-toastify'
 import { fetchData } from '../../services/apiCallSerive'
 import * as apiCallSerive from '../../services/apiCallSerive';
+import Pagination from '../../components/pagination';
 
 const DashboardPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,6 +15,8 @@ const DashboardPage = () => {
     let [data, setData] = useState([]);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [deleteItem, setDeleteItem] = useState(null);
+    const [pageNo, setPageNo] = useState(1);
+    const [totalPages, setotalPages] = useState(1);
     
 
     // Prevent back navigation into login/welcome while user is authenticated
@@ -32,7 +35,7 @@ const DashboardPage = () => {
     }, []);
     useEffect(() => {
         getContentData();
-    }, []);
+    }, [pageNo]);
 
     const handleEdit = (item, view = false) => {
         setEditItem(item);
@@ -66,9 +69,20 @@ const DashboardPage = () => {
 
     
     const getContentData = async () => {
+        let numberOfitemsPerPage = 8;
+        let skip = (pageNo - 1) * numberOfitemsPerPage;
+        let limit = numberOfitemsPerPage;
+        let params = {
+            skip: skip,
+            limit: limit
+        }; 
         try {
-            let res = await apiCallSerive.fetchData('getContent');
-            setData(res);
+
+            let res = await apiCallSerive.fetchData('getContent',params );
+            setData(res.data || []);
+         
+            setotalPages(Math.ceil(res.total / numberOfitemsPerPage));
+
             console.log('Fetched content data:', res);
 
         } catch (error) {
@@ -148,12 +162,18 @@ const DashboardPage = () => {
                 })}
               </div>
             )}
+            <Pagination
+    currentPage={pageNo}
+    totalPages={totalPages}
+    onPageChange={(p) => setPageNo(p)}
+/>
             </div>
             <div className="add-content-button-container">
                 <button className="add-content-button" onClick={handleAddContent}>
                     <span className="add-content-icon">+</span>
                     Add Content
                 </button>
+
             </div>
 
             {isModalOpen && <Addcontent onClose={handleCloseModal}  refresh={getContentData} editItem={editItem} view={viewClicked} />}

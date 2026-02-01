@@ -31,11 +31,15 @@ const createConfig = (data) =>{
 
 }
 
-export const fetchData = async (endpoint) => {
+export const fetchData = async (endpoint, param) => {
+
   try {
+    if (param) {
+        return  (await api.get(endpoint, { params: param })).data;
+    }else{
+        return (await api.get(endpoint)).data;
+    }
     
-    const response = await api.get(endpoint);
-    return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
     throw error;
