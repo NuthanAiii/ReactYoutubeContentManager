@@ -3,15 +3,22 @@ import schemas
 import models
 from database import get_db
 from sqlalchemy.orm import Session
+from fastapi import Query
 
 from routers.outh2 import get_current_user
 
 router = APIRouter(tags=['content'])
 
-@router.get('/getContent', response_model=list[schemas.GetContent])
-def getContent(db: Session = Depends(get_db), user: schemas.GetUser = Depends(get_current_user)):
-    content = db.query(models.Data).all()
-    return content
+@router.get('/getContent', response_model=schemas.fetchContetOnPageReq)
+#here skip and limit are query parameters
+# skip is used to skip certain number of records
+# limit is used to limit the number of records returned, means 10 record, if limit is 10
+def getContent(skip: int = Query(0, ge=0),
+    limit: int = Query(10, ge=1, le=40), db: Session = Depends(get_db), user: schemas.GetUser = Depends(get_current_user)):
+    content = db.query(models.Data).order_by(models.Data.id.desc()).offset(skip).limit(limit).all()
+    total = db.query(models.Data).count()
+    page = (skip // limit) + 1
+    return {"page": page, "total": total, "data": content}
 
 
 @router.post("/setContent")

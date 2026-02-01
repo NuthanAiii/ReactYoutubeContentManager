@@ -20,26 +20,32 @@ class GetUser(BaseModel):
 
 class Content(BaseModel):
     title: str
-    description: str
+    description: Optional[str]=""
     type: str
-    category: str
     uploaded: bool
     script: str
-    hashtags: List[str]
-    thumbnailUrl: str
+    thumbnailUrl: Optional[str]=""
     platform: str
-    videoUrl: str
+    videoUrl: Optional[str]=""
     publishDate: str
     publishTime: Optional[str] = ""
 
 class GetContent(Content):
     id: int
+    
+
     class Config():
         from_attributes=True
+class fetchContetOnPageReq(BaseModel):
+    page: int
+    total: int  
+    data: List[GetContent]
+
+    class Config():
+        from_attributes = True      
 
 class deleteContentReq(BaseModel):
     id: int
-    
 class editContentReq(Content):
     id: int
 
