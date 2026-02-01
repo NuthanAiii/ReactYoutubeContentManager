@@ -1,0 +1,43 @@
+.da-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2,6,23,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+}
+
+.da-modal {
+  background: rgba(15,23,42,0.98);
+  border-radius: 12px;
+  padding: 20px;
+  width: 100%;
+  max-width: 420px;
+  border: 1px solid rgba(148,163,184,0.08);
+  box-shadow: 0 12px 40px rgba(2,6,23,0.6);
+}
+
+.da-title {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  color: #f8fafc;
+}
+
+.da-message {
+  color: #cbd5e1;
+  margin-bottom: 16px;
+}
+
+.da-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+/* re-use existing .ghost and .primary styles from dashboard; ensure adequate spacing on small screens */
+@media (max-width: 480px) {
+  .da-modal { padding: 16px; }
+  .da-actions { flex-direction: column; }
+  .da-actions button { width: 100%; }
+}

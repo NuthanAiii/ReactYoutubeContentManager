@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import './addContent.css';
 import { useForm } from "react-hook-form";
+import * as apiCallSerive from '../../services/apiCallSerive';
+import { toast } from "react-toastify";
 
-const Addcontent = ({ onClose, editItem, view }) => {
+const Addcontent = ({ onClose ,refresh,editItem, view }) => {
     const {
         register: contentForm,
         handleSubmit: addContent,
@@ -38,10 +40,27 @@ const Addcontent = ({ onClose, editItem, view }) => {
         }
     }, [editItem, resetAddContent]);
 
-    const onSubmit = (data) => {
+    const onSubmit = async(data) => {
         if (view) return;
-        console.log('Form submitted:', data);
+        let endPoint='';
+        if (editItem) {
+           endPoint = 'updateContent';
+
+        }else{
+             endPoint = 'setContent';
+
+        }
+        await apiCallSerive.postData(endPoint, data);
+        if(editItem){
+            toast.success('Content updated successfully');
+        }
+        else{
+            toast.success('Content added successfully');
+        }
+        
+        refresh();
         onClose();
+        
     };
 
     const handleCancel = () => {

@@ -1,7 +1,9 @@
-import React, { useState, useEffect, use } from 'react'
+import React, { useState, useEffect } from 'react'
 import './dashboardPage.css'
 import Header from '../../layouts/header'
 import Addcontent from './addContent'
+import DeleteAlert from '../../components/deleteAlert'
+import { toast } from 'react-toastify'
 import { fetchData } from '../../services/apiCallSerive'
 import * as apiCallSerive from '../../services/apiCallSerive';
 
@@ -10,6 +12,9 @@ const DashboardPage = () => {
     const [editItem, setEditItem] = useState(null);
     const [viewClicked, setViewClicked] = useState(false);
     let [data, setData] = useState([]);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const [deleteItem, setDeleteItem] = useState(null);
+    
 
     // Prevent back navigation into login/welcome while user is authenticated
     useEffect(() => {
@@ -37,8 +42,12 @@ const DashboardPage = () => {
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
+        setIsDeleteOpen(false);
         setEditItem(null); // Reset edit item when closing
         setViewClicked(false); // Reset view mode when closing
+        setDeleteItem(null);
+        // Refresh content data after closing modal
+        
     }
 
     const handleAddContent = () => {
@@ -46,6 +55,16 @@ const DashboardPage = () => {
         setViewClicked(false); // Ensure not in view mode when adding new
         setIsModalOpen(true);
     }
+
+    const handleDelete = (item) => {
+       
+        setIsDeleteOpen(true);
+        setDeleteItem(item);
+    }
+
+  
+
+    
     const getContentData = async () => {
         try {
             let res = await apiCallSerive.fetchData('getContent');
@@ -95,9 +114,11 @@ const DashboardPage = () => {
                                 )}
                             </div>
                             <div className='card-actions'>
-                                {!item.uploaded && <button className='ghost danger'>
-                                    Delete
-                                </button>}
+                                {!item.uploaded && (
+                                    <button className='ghost danger' onClick={() => handleDelete(item)}>
+                                        Delete
+                                    </button>
+                                )}
                                 <button className='ghost' onClick={() => handleEdit(item)}>
                                     Edit
                                 </button>
@@ -117,7 +138,18 @@ const DashboardPage = () => {
                 </button>
             </div>
 
-            {isModalOpen && <Addcontent onClose={handleCloseModal} editItem={editItem} view={viewClicked} />}
+            {isModalOpen && <Addcontent onClose={handleCloseModal}  refresh={getContentData} editItem={editItem} view={viewClicked} />}
+            {isDeleteOpen && <DeleteAlert
+                
+                title="Delete content"
+                message={deleteItem ? `Are you sure you want to delete \"${deleteItem.title}\"?` : 'Are you sure you want to delete this item?'}
+                onClose={handleCloseModal}
+                item = {deleteItem}
+                refresh={getContentData}
+                
+                
+            />}
+            
 
         </>
     )
