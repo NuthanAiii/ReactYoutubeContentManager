@@ -23,3 +23,24 @@ def setContent(req: schemas.Content, db: Session = Depends(get_db), user: schema
     db.commit()
     db.refresh(new_content)
     return new_content
+@router.post("/deleteContent")
+def deleteContent(req: schemas.deleteContentReq, db: Session = Depends(get_db), user: schemas.GetUser = Depends(get_current_user) ):
+    content = db.query(models.Data).filter(models.Data.id == req.id).first()
+    if content:
+        db.delete(content)
+        db.commit()
+        return {"message": "Content deleted successfully"}
+    else:
+        return {"message": "Content not found"}
+
+@router.post("/updateContent")
+def updateContent(req: schemas.GetContent, db: Session = Depends(get_db), user: schemas.GetUser = Depends(get_current_user) ):
+    content = db.query(models.Data).filter(models.Data.id == req.id).first()
+    if content:
+        for key, value in req.model_dump().items():
+            setattr(content, key, value)
+        db.commit()
+        db.refresh(content)
+        return content
+    else:
+        return {"message": "Content not found"}

@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
+from typing import List
 
 
 
@@ -24,7 +25,7 @@ class Content(BaseModel):
     category: str
     uploaded: bool
     script: str
-    hashtags: str
+    hashtags: List[str]
     thumbnailUrl: str
     platform: str
     videoUrl: str
@@ -32,8 +33,15 @@ class Content(BaseModel):
     publishTime: Optional[str] = ""
 
 class GetContent(Content):
+    id: int
     class Config():
         from_attributes=True
+
+class deleteContentReq(BaseModel):
+    id: int
+    
+class editContentReq(Content):
+    id: int
 
 class Login(BaseModel):
     email:str

@@ -1,6 +1,6 @@
 import email
 from database import Base
-from sqlalchemy import Boolean, Column, Integer, String, table, true
+from sqlalchemy import Boolean, Column, Integer, String, table, true, JSON, text
 # over all this fine model is used to create the table
 class Data(Base):
     __tablename__ = "Content"
@@ -11,7 +11,7 @@ class Data(Base):
     category=Column(String, index=True)
     uploaded= Column(Boolean, index=True)
     script=Column(String, index=True)
-    hashtags= Column(String, index=True)
+    hashtags= Column(JSON, index=True, nullable=False, server_default=text("'[]'"))
     thumbnailUrl=Column(String, index=True)
     platform= Column(String, index=True)
     videoUrl=Column(String, index=True)
