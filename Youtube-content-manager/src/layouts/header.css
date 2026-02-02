@@ -93,6 +93,45 @@
   background: rgba(34,211,238,0.06);
   color: #22d3ee;
 }
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* logo image */
+
+.header-app-logo {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.35));
+}
+
+/* gradient + slight 3D look */
+
+.header-logo-text {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+
+  /* simple elegant two-shade gradient */
+  background: linear-gradient(
+    90deg,
+    #e2e8f0 0%,
+    #94a3b8 100%
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* very subtle depth only */
+  text-shadow: 0 1px 0 rgba(0,0,0,0.25);
+}
+
+
+
 
 @media (max-width: 480px) {
   .profile-button {

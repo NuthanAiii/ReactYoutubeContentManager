@@ -42,6 +42,10 @@ export const fetchData = async (endpoint, param) => {
     
   } catch (error) {
     console.error("Error fetching data:", error);
+    if(error.status === 401){
+        sessionStorage.removeItem('authToken');
+        window.location.reload();
+    }
     throw error;
   }
 };

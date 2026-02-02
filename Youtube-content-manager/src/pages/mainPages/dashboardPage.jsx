@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 import { fetchData } from '../../services/apiCallSerive'
 import * as apiCallSerive from '../../services/apiCallSerive';
 import Pagination from '../../components/pagination';
+import ContentFilter from '../../components/filter';
 
 const DashboardPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -115,7 +116,10 @@ const DashboardPage = () => {
                 </div>
               </div>
             ) : (
+                <>
+             <ContentFilter onApply={()=>"" } />
               <div className='dashboard-grid'>
+                
                 {data.map(item => {
                   return (<div key={item.id} className='dashboard-card'>
                       <div className='card-badge'>
@@ -161,6 +165,7 @@ const DashboardPage = () => {
                   </div>)
                 })}
               </div>
+              </>
             )}
             <Pagination
     currentPage={pageNo}

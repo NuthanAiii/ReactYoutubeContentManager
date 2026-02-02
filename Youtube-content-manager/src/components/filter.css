@@ -1,0 +1,85 @@
+.content-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  border-radius: 12px;
+}
+
+/* inputs & select */
+
+.content-filter input[type="text"],
+.content-filter input[type="date"],
+.content-filter select {
+  background: rgba(148, 163, 184, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  color: #e5e7eb;
+
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  outline: none;
+  min-height: 34px;
+}
+
+.content-filter select {
+  cursor: pointer;
+}
+
+/* placeholder */
+
+.content-filter input::placeholder {
+  color: #94a3b8;
+}
+
+/* checkbox labels */
+
+.content-filter label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #cbd5e1;
+  cursor: pointer;
+}
+
+/* checkbox itself */
+
+.content-filter input[type="checkbox"] {
+  accent-color: #22d3ee;
+  cursor: pointer;
+}
+
+/* buttons */
+
+.content-filter button {
+  background: rgba(148, 163, 184, 0.06);
+  color: #e2e8f0;
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.content-filter button:hover {
+  background: rgba(148, 163, 184, 0.12);
+}
+
+/* small screens */
+
+@media (max-width: 600px) {
+  .content-filter {
+    gap: 8px;
+  }
+
+  .content-filter input[type="text"] {
+    width: 100%;
+  }
+}

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useSelector,useDispatch } from 'react-redux'
 import { logOut } from '../slices/authSlice'
+import logo from '../assets/logo.png'
 
 const Header = () => {
   const [open, setOpen] = useState(false)
@@ -38,7 +39,11 @@ const Header = () => {
   return (
     <header className="header">
       <div className="header-container">
-        <h1 className="header-logo">Youtube Content Manager {user ? (user.username || user.name || user) : ''}</h1>
+       <div className="header-brand">
+  <img src={logo} alt="App logo" className="header-app-logo" />
+  <h1 className="header-logo-text">Media Content Manager</h1>
+</div>
+      
 
         <div className="profile" ref={ref}>
           <button
