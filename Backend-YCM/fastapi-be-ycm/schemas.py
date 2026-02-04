@@ -48,9 +48,7 @@ class searchContentReq(BaseModel):
     from_date: Optional[date] = None
     to_date: Optional[date] = None
     type: Optional[str] = None
-    uploaded: Optional[bool] = None
-    scheduled: Optional[bool] = None
-    overDue: Optional[bool] = None
+    status: Optional[str] = None
     class Config():
         from_attributes = True
 

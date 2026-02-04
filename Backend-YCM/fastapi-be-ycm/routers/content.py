@@ -17,19 +17,29 @@ router = APIRouter(tags=['content'])
 def getContent(req: schemas.searchContentReq,skip: int = Query(0, ge=0),
     limit: int = Query(10, ge=1, le=40), db: Session = Depends(get_db), user: schemas.GetUser = Depends(get_current_user)):
     data = db.query(models.Data)
+    
+    
     if req.from_date:
         data = data.filter(models.Data.publishDate >= req.from_date)
     if req.to_date:
         data = data.filter(models.Data.publishDate <= req.to_date)
     if req.type:
         data = data.filter(models.Data.type == req.type)
-    if req.uploaded is not None:
-        data = data.filter(models.Data.uploaded == req.uploaded)
-    if req.scheduled is not None:
-        data = data.filter(models.Data.uploaded.is_(False))
+    if req.status == 'uploaded':
+        data = data.filter(models.Data.uploaded.is_(True))
+
+    elif req.status == 'scheduled':
+        data = data.filter(
+            models.Data.publishDate > date.today(),
+            models.Data.uploaded.is_(False)
+        )
+
+    elif req.status == 'overdue':
+        data = data.filter(
+            models.Data.publishDate < date.today(),
+            models.Data.uploaded.is_(False)
+        )
     
-    if req.overDue is not None:
-        data = data.filter(models.Data.publishDate < date.today(), models.Data.uploaded.is_(False))
     content = data.order_by(models.Data.id.desc()).offset(skip).limit(limit).all()
     total = data.count()
     page = (skip // limit) + 1
