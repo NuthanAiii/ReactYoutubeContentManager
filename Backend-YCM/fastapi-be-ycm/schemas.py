@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 from typing import List
-
+from datetime import date
 
 
 #this is used to define the type of data we are accepting into api or passing form api 
@@ -43,6 +43,7 @@ class fetchContetOnPageReq(BaseModel):
 
     class Config():
         from_attributes = True      
+        
 class searchContentReq(BaseModel):
     from_date: Optional[date] = None
     to_date: Optional[date] = None
