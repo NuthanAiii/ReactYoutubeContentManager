@@ -49,6 +49,24 @@ export const fetchData = async (endpoint, param) => {
     throw error;
   }
 };
+export const fetchDataWithreq = async (endpoint, data,param) => {
+
+  try {
+    if (param) {
+        return  (await api.post(endpoint, data,{ params: param })).data;
+    }else{
+        return (await api.post(endpoint,data)).data;
+    }
+    
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    if(error.status === 401){
+        sessionStorage.removeItem('authToken');
+        window.location.reload();
+    }
+    throw error;
+  }
+};
 
 
 export const postData = async (endpoint, data) => {

@@ -8,6 +8,7 @@ import { fetchData } from '../../services/apiCallSerive'
 import * as apiCallSerive from '../../services/apiCallSerive';
 import Pagination from '../../components/pagination';
 import ContentFilter from '../../components/filter';
+import { get } from 'react-hook-form'
 
 const DashboardPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,6 +19,7 @@ const DashboardPage = () => {
     const [deleteItem, setDeleteItem] = useState(null);
     const [pageNo, setPageNo] = useState(1);
     const [totalPages, setotalPages] = useState(1);
+    const [reqObj, setReqObj] = useState({});
     
 
     // Prevent back navigation into login/welcome while user is authenticated
@@ -65,7 +67,11 @@ const DashboardPage = () => {
         setIsDeleteOpen(true);
         setDeleteItem(item);
     }
+   const filter = (data) =>{
+        setReqObj(data);
+        getContentData();
 
+   }
   
 
     
@@ -77,9 +83,11 @@ const DashboardPage = () => {
             skip: skip,
             limit: limit
         }; 
+        console.log('Request object for filtering:', reqObj);
+        let data ={from_date: reqObj.startDate || null, to_date: reqObj.endDate || null, type: reqObj.type || null, status: reqObj.status || null};
         try {
 
-            let res = await apiCallSerive.fetchData('getContent',params );
+            let res = await apiCallSerive.fetchDataWithreq('getContent',data,params );
             setData(res.data || []);
          
             setotalPages(Math.ceil(res.total / numberOfitemsPerPage));
@@ -117,7 +125,7 @@ const DashboardPage = () => {
               </div>
             ) : (
                 <>
-             <ContentFilter onApply={()=>"" } />
+             <ContentFilter onApply={(data)=> filter(data) } />
               <div className='dashboard-grid'>
                 
                 {data.map(item => {
