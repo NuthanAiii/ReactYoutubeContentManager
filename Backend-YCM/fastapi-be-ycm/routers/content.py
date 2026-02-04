@@ -4,19 +4,34 @@ import models
 from database import get_db
 from sqlalchemy.orm import Session
 from fastapi import Query
-
+from datetime import date
 from routers.outh2 import get_current_user
 
 router = APIRouter(tags=['content'])
 
-@router.get('/getContent', response_model=schemas.fetchContetOnPageReq)
+@router.post('/getContent', response_model=schemas.fetchContetOnPageReq)
 #here skip and limit are query parameters
 # skip is used to skip certain number of records
 # limit is used to limit the number of records returned, means 10 record, if limit is 10
-def getContent(skip: int = Query(0, ge=0),
+# and here we have introduced search request body to filter the content based on certain criteria
+def getContent(req: schemas.searchContentReq,skip: int = Query(0, ge=0),
     limit: int = Query(10, ge=1, le=40), db: Session = Depends(get_db), user: schemas.GetUser = Depends(get_current_user)):
-    content = db.query(models.Data).order_by(models.Data.id.desc()).offset(skip).limit(limit).all()
-    total = db.query(models.Data).count()
+    data = db.query(models.Data)
+    if req.from_date:
+        data = data.filter(models.Data.publishDate >= req.from_date)
+    if req.to_date:
+        data = data.filter(models.Data.publishDate <= req.to_date)
+    if req.type:
+        data = data.filter(models.Data.type == req.type)
+    if req.uploaded is not None:
+        data = data.filter(models.Data.uploaded == req.uploaded)
+    if req.scheduled is not None:
+        data = data.filter(models.Data.uploaded.is_(False))
+    
+    if req.overDue is not None:
+        data = data.filter(models.Data.publishDate < date.today(), models.Data.uploaded.is_(False))
+    content = data.order_by(models.Data.id.desc()).offset(skip).limit(limit).all()
+    total = data.count()
     page = (skip // limit) + 1
     return {"page": page, "total": total, "data": content}
 
