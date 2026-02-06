@@ -49,6 +49,7 @@ class searchContentReq(BaseModel):
     to_date: Optional[date] = None
     type: Optional[str] = None
     status: Optional[str] = None
+    search: Optional[str] = None
     class Config():
         from_attributes = True
 

@@ -26,8 +26,14 @@ def getContent(req: Optional[schemas.searchContentReq] = None,skip: int = Query(
             data = data.filter(models.Data.publishDate <= req.to_date)
         if req.type:
             data = data.filter(models.Data.type == req.type)
+        if req.search:
+            search_term = f"%{req.search}%"
+            data = data.filter(
+                models.Data.title.ilike(search_term) | models.Data.description.ilike(search_term)
+            )
         if req.status == 'uploaded':
             data = data.filter(models.Data.uploaded.is_(True))
+       
 
         elif req.status == 'scheduled':
             data = data.filter(
