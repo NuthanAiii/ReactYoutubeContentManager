@@ -1,0 +1,86 @@
+# Project Notes: ReactYoutubeContentManager
+
+## Overview
+This project is a YouTube Content Manager with a React frontend and a FastAPI backend. It allows users to manage YouTube content, authenticate, and interact with a database.
+
+---
+
+## Structure
+
+- **Backend-YCM/fastapi-be-ycm/**
+  - FastAPI backend for authentication, content management, and database operations.
+  - Contains routers, models, schemas, and utility files.
+  - Uses a virtual environment for dependencies.
+
+- **Youtube-content-manager/**
+  - React frontend for user interaction.
+  - Contains pages, components, layouts, routes, services, slices, and store configuration.
+
+---
+
+## Backend (FastAPI)
+- **main.py**: Entry point for FastAPI app.
+- **database.py**: Database connection and setup.
+- **models.py**: Database models.
+- **schemas.py**: Pydantic schemas for request/response validation.
+- **routers/**: API endpoints for authentication, content, token, etc.
+- **hashing.py**: Password hashing utilities.
+- **outh2.py**: OAuth2 authentication logic.
+- **token.py**: Token generation and validation.
+
+### Virtual Environment
+- Located in `fastapi-venv/`.
+- Install dependencies listed in `requirments.txt`.
+
+---
+
+## Frontend (React)
+- **src/**
+  - **components/**: Reusable UI components (alerts, filters, pagination).
+  - **layouts/**: Layout elements (header).
+  - **pages/**: Authentication and main pages (login, dashboard, add content, welcome).
+  - **routes/**: Route guards and app routing.
+  - **services/**: API call service for backend communication.
+  - **slices/**: Redux slices for state management (auth).
+  - **stores/**: Redux store configuration.
+
+---
+
+## Setup
+
+### Backend
+1. Navigate to `Backend-YCM/fastapi-be-ycm/`.
+2. Activate virtual environment:
+   - `source fastapi-venv/bin/activate`
+3. Install dependencies:
+   - `pip install -r requirments.txt`
+4. Run FastAPI server:
+   - `uvicorn main:app --reload`
+
+### Frontend
+1. Navigate to `Youtube-content-manager/`.
+2. Install dependencies:
+   - `npm install`
+3. Start development server:
+   - `npm run dev`
+
+---
+
+## Useful Files
+- `README.md` (both frontend and backend): Project-specific instructions.
+- `package.json`: Dependency management for frontend.
+- `requirments.txt`: Dependency management for backend.
+
+---
+
+## Notes
+- Ensure backend is running before using frontend.
+- API endpoints are protected by authentication.
+- Use Redux for state management in frontend.
+- Use FastAPI routers for modular backend API design.
+
+---
+
+## Author & Date
+- Notes created by GitHub Copilot
+- Date: 6 February 2026
