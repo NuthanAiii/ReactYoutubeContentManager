@@ -149,11 +149,15 @@ const Addcontent = ({ onClose ,refresh,editItem, view }) => {
                         {/* Date and Time Row */}
                         <div className="form-row">
                             <div className="form-group">
-                                <label htmlFor="publishDate">Publish Date</label>
+                               
+                                <label htmlFor="publishDate">Publish Date <span className="required">*</span></label>
                                 <input
                                     type="date"
                                     id="publishDate"
-                                    {...contentForm('publishDate')}
+                                    {...contentForm('publishDate',{
+                                        required: 'Please select a publish date',
+                                        min: new Date().toISOString().split('T')[0] // Disable past dates
+                                    })}
                                     disabled={view}
                                 />
                             </div>

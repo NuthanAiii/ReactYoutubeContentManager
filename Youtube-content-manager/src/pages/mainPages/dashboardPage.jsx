@@ -67,15 +67,15 @@ const DashboardPage = () => {
         setIsDeleteOpen(true);
         setDeleteItem(item);
     }
-   const filter = (data) =>{
+   const filter = async(data) =>{
         setReqObj(data);
-        getContentData();
+        getContentData(data);
 
    }
   
 
     
-    const getContentData = async () => {
+    const getContentData = async (reqdata) => {
         let numberOfitemsPerPage = 8;
         let skip = (pageNo - 1) * numberOfitemsPerPage;
         let limit = numberOfitemsPerPage;
@@ -84,7 +84,10 @@ const DashboardPage = () => {
             limit: limit
         }; 
         console.log('Request object for filtering:', reqObj);
-        let data ={from_date: reqObj.startDate || null, to_date: reqObj.endDate || null, type: reqObj.type || null, status: reqObj.status || null};
+        if(reqdata){
+        var data ={from_date: reqdata.startDate || null, to_date: reqdata.endDate || null, type: reqdata.type || null, status: reqdata.status || null};
+
+        }
         try {
 
             let res = await apiCallSerive.fetchDataWithreq('getContent',data,params );
@@ -106,6 +109,7 @@ const DashboardPage = () => {
         <>
             <Header />
             <div className='dashboard-page'>
+                <ContentFilter onApply={(data)=> filter(data) } />
 
                 {data.length === 0 ? (
               <div className="no-data-fullpage">
@@ -125,7 +129,7 @@ const DashboardPage = () => {
               </div>
             ) : (
                 <>
-             <ContentFilter onApply={(data)=> filter(data) } />
+             
               <div className='dashboard-grid'>
                 
                 {data.map(item => {
