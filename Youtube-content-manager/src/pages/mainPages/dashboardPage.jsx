@@ -19,7 +19,7 @@ const DashboardPage = () => {
     const [deleteItem, setDeleteItem] = useState(null);
     const [pageNo, setPageNo] = useState(1);
     const [totalPages, setotalPages] = useState(1);
-    const [reqObj, setReqObj] = useState({});
+    
     
 
     // Prevent back navigation into login/welcome while user is authenticated
@@ -68,10 +68,12 @@ const DashboardPage = () => {
         setDeleteItem(item);
     }
    const filter = async(data) =>{
-        setReqObj(data);
+        
         getContentData(data);
 
    }
+
+
   
 
     
@@ -83,9 +85,9 @@ const DashboardPage = () => {
             skip: skip,
             limit: limit
         }; 
-        console.log('Request object for filtering:', reqObj);
+        
         if(reqdata){
-        var data ={from_date: reqdata.startDate || null, to_date: reqdata.endDate || null, type: reqdata.type || null, status: reqdata.status || null};
+        var data ={from_date: reqdata.startDate || null, to_date: reqdata.endDate || null, type: reqdata.type || null, status: reqdata.status || null, search: reqdata.search || null};
 
         }
         try {

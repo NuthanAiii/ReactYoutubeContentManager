@@ -1,5 +1,5 @@
-import React from 'react'
-import { useForm } from 'react-hook-form'
+import React, { useEffect } from 'react'
+import { set, useForm } from 'react-hook-form'
 import './filter.css'
 
 const ContentFilter = ({ onApply }) => {
@@ -7,7 +7,8 @@ const ContentFilter = ({ onApply }) => {
     const {
         register,
         handleSubmit,
-        reset
+        reset,
+        watch,
     } = useForm({
         defaultValues: {
             search: '',
@@ -34,6 +35,20 @@ const ContentFilter = ({ onApply }) => {
         reset(empty)
         onApply(empty)
     }
+    useEffect(() => {
+        if (watch('search').length > 3 || watch('search').length === 0) {
+            const timer = setTimeout(() => {
+                onApply({ search: watch('search') });
+
+            }, 1000);
+
+            return () => clearTimeout(timer);
+        }
+
+
+
+
+    }, [watch('search')])
 
     return (
         <form
@@ -48,11 +63,19 @@ const ContentFilter = ({ onApply }) => {
                 {...register('search')}
             />
 
+
             {/* Start date */}
             <input
                 type="date"
                 {...register('startDate')}
             />
+            {watch('search').length > 0 && (<button type="button" onClick={() => {
+                reset({ ...watch(), search: "" });
+                onApply({ ...watch(), search: "" });
+            }}>
+                Clear Search
+            </button>)}
+
 
             {/* End date */}
             <input
