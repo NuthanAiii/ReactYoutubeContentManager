@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir --upgrade pip \
 
 COPY . .
 
-
+RUN mkdir -p /app/data
 
 EXPOSE 8000
 
