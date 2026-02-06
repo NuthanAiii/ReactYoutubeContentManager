@@ -187,13 +187,13 @@ const DashboardPage = () => {
     onPageChange={(p) => setPageNo(p)}
 />
             </div>
-            <div className="add-content-button-container">
+           {data.length > 0 && (<div className="add-content-button-container">
                 <button className="add-content-button" onClick={handleAddContent}>
                     <span className="add-content-icon">+</span>
                     Add Content
                 </button>
 
-            </div>
+            </div>)} 
 
             {isModalOpen && <Addcontent onClose={handleCloseModal}  refresh={getContentData} editItem={editItem} view={viewClicked} />}
             {isDeleteOpen && <DeleteAlert
