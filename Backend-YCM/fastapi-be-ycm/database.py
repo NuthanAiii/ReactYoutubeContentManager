@@ -1,9 +1,11 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+import os
 #
 # over all this fine database is used to create the connection to the database
-DATABASE_URL = "sqlite:///./data/content.db"
+#if we get database url from environment variable then we use that otherwise we use sqlite database
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./data/content.db")  # Set the environment variable for the database URL
 
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 # engine is used to create the connection to the database
