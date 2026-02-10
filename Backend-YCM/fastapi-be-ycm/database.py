@@ -5,9 +5,9 @@ import os
 #
 # over all this fine database is used to create the connection to the database
 #if we get database url from environment variable then we use that otherwise we use sqlite database
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./data/content.db")  # Set the environment variable for the database URL
+DATABASE_URL = os.getenv("DATABASE_URL")  # Set the environment variable for the database URL
 
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+engine = create_engine(DATABASE_URL)
 # engine is used to create the connection to the database
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
