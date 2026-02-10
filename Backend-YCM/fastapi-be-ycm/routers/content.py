@@ -17,7 +17,9 @@ router = APIRouter(tags=['content'])
 # and here we have introduced search request body to filter the content based on certain criteria
 def getContent(req: Optional[schemas.searchContentReq] = None,skip: int = Query(0, ge=0),
     limit: int = Query(10, ge=1, le=40), db: Session = Depends(get_db), user: schemas.GetUser = Depends(get_current_user)):
-    data = db.query(models.Data)
+    
+    user_id = user.id
+    data= db.query(models.Data).filter(models.Data.user_id == user_id) # here we are filtering the content based on user id, so that user can only see his content
     
     if req:
         if req.from_date:
@@ -55,8 +57,11 @@ def getContent(req: Optional[schemas.searchContentReq] = None,skip: int = Query(
 
 @router.post("/setContent")
 def setContent(req: schemas.Content, db: Session = Depends(get_db), user: schemas.GetUser = Depends(get_current_user) ):
+    user_id = user.id
+    
     new_content = models.Data(
-        **req.model_dump()
+        **req.model_dump(),
+        user_id=user_id
     )
     db.add(new_content)
     db.commit()
@@ -64,7 +69,9 @@ def setContent(req: schemas.Content, db: Session = Depends(get_db), user: schema
     return new_content
 @router.post("/deleteContent")
 def deleteContent(req: schemas.deleteContentReq, db: Session = Depends(get_db), user: schemas.GetUser = Depends(get_current_user) ):
-    content = db.query(models.Data).filter(models.Data.id == req.id).first()
+    user_id = user.id
+    data = db.query(models.Data).filter(models.Data.user_id == user_id)
+    content = data.filter(models.Data.id == req.id).first()
     if content:
         db.delete(content)
         db.commit()
@@ -74,10 +81,13 @@ def deleteContent(req: schemas.deleteContentReq, db: Session = Depends(get_db), 
 
 @router.post("/updateContent")
 def updateContent(req: schemas.GetContent, db: Session = Depends(get_db), user: schemas.GetUser = Depends(get_current_user) ):
-    content = db.query(models.Data).filter(models.Data.id == req.id).first()
+    user_id = user.id
+    data = db.query(models.Data).filter(models.Data.user_id == user_id)
+    content = data.filter(models.Data.id == req.id).first()
     if content:
         for key, value in req.model_dump().items():
             setattr(content, key, value)
+        
         db.commit()
         db.refresh(content)
         return content

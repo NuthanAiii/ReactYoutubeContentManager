@@ -14,6 +14,7 @@ class User(BaseModel):
 class GetUser(BaseModel):
     name:str
     email:str
+    id: int
     
     class Config():
         from_attributes = True

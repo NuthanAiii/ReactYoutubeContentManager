@@ -33,7 +33,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect password")
     #here while createing access tocken i will sedning email, so while verifing we will checking weather 
     #that email is exist in the tocken.
-    access_token = create_access_token(data={"sub": user.email}) # In JWT, sub stands for "Subject". here 
+    access_token = create_access_token(data={"sub": user.email, "user_id": user.id}) # In JWT, sub stands for "Subject". here 
     return {"access_token": access_token, "token_type": "bearer"}    
 
 

@@ -6,6 +6,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 class Data(Base):
     __tablename__ = "Content"
     id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, index=True)
     title = Column(String, index=True)
     description= Column(String, index=True)
     type= Column(String, index=True)
@@ -13,7 +14,6 @@ class Data(Base):
     uploaded= Column(Boolean, index=True)
     script=Column(String, index=True)
     hashtags = Column(JSONB, nullable=False, server_default=text("'[]'::jsonb"))
-
     thumbnailUrl=Column(String, index=True)
     platform= Column(String, index=True)
     videoUrl=Column(String, index=True)
