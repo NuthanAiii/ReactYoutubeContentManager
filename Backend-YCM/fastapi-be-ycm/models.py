@@ -1,6 +1,7 @@
 import email
 from database import Base
 from sqlalchemy import Boolean, Column, Integer, String, table, true, JSON, text
+from sqlalchemy.dialects.postgresql import JSONB
 # over all this fine model is used to create the table
 class Data(Base):
     __tablename__ = "Content"
@@ -11,7 +12,8 @@ class Data(Base):
     category=Column(String, index=True)
     uploaded= Column(Boolean, index=True)
     script=Column(String, index=True)
-    hashtags= Column(JSON, index=True, nullable=False, server_default=text("'[]'"))
+    hashtags = Column(JSONB, nullable=False, server_default=text("'[]'::jsonb"))
+
     thumbnailUrl=Column(String, index=True)
     platform= Column(String, index=True)
     videoUrl=Column(String, index=True)
