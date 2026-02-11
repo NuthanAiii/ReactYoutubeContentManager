@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 from typing import List
 from datetime import date
+from datetime import time
 
 
 #this is used to define the type of data we are accepting into api or passing form api 
@@ -28,8 +29,8 @@ class Content(BaseModel):
     thumbnailUrl: Optional[str]=""
     platform: str
     videoUrl: Optional[str]=""
-    publishDate: str
-    publishTime: Optional[str] = ""
+    publishDate: date
+    publishTime: Optional[time] = None
 
 class GetContent(Content):
     id: int
