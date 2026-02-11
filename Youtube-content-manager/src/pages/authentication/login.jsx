@@ -111,24 +111,26 @@ const LoginPage = ({ setLoading }) => {
                     )}
 
                     <div className='form-group'>
-                        <label htmlFor="userName">Username</label>
+                        <label htmlFor="userName">User Email</label>
                         <input
                             type="text"
                             id="userName"
                             {...loginform('userName', {
-                                required: 'Username is required',
-                                minLength: {
-                                    value: 3,
-                                    message: 'Username must be at least 3 characters'
-                                },
+                                required: 'User email is required',
+                                
                                 validate: (value) => {
                                     if (!value.trim()) {
-                                        return 'Username is required';
+                                        return 'User email is required';
+                                    }
+                                    // Email regex validation
+                                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                    if (!emailRegex.test(value)) {
+                                        return 'Enter a valid email address';
                                     }
                                     return true;
                                 }
                             })}
-                            placeholder="Enter username"
+                            placeholder="Enter user email"
                             className={touchedFields.userName && errors.userName ? 'input-error' : ''}
                         />
                         {touchedFields.userName && errors.userName && (
