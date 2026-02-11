@@ -2,6 +2,7 @@ import email
 from database import Base
 from sqlalchemy import Boolean, Column, Integer, String, table, true, JSON, text
 from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import Date, Time
 # over all this fine model is used to create the table
 class Data(Base):
     __tablename__ = "Content"
@@ -17,8 +18,8 @@ class Data(Base):
     thumbnailUrl=Column(String, index=True)
     platform= Column(String, index=True)
     videoUrl=Column(String, index=True)
-    publishDate= Column(String, index=True)
-    publishTime=Column(String, index=True)
+    publishDate= Column(Date, index=True)
+    publishTime=Column(Time, index=True)
     
      
 class User(Base):
