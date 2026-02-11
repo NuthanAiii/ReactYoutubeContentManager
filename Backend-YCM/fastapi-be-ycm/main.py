@@ -8,7 +8,7 @@ from database import engine, SessionLocal
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:3000"],  # frontend URL
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:3000", "https://reactyoutubecontentmanager.onrender.com"],  # frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
