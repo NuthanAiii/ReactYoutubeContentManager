@@ -6,19 +6,16 @@ import LoginPage from '../../pages/authentication/login'
 
 import RouteGuard from '../mainRoutes/routeGuard'
 import PrivateGuard from '../mainRoutes/privateGuard'
-const AppRoute = () =>{
+const AppRoute = ({ setLoading }) =>{
     return(
         <Routes>
             <Route element={<RouteGuard/>}>
-                <Route path='/dashboard' element={<DashboardPage />} />
+                <Route path='/dashboard' element={<DashboardPage setLoading={setLoading} />} />
             </Route>
             <Route element={<PrivateGuard/>}>
-            <Route path='/' element={<WelcomePage />} />
-            <Route path='/login' element={<LoginPage />} /> 
-
+            <Route path='/' element={<WelcomePage setLoading={setLoading} />} />
+            <Route path='/login' element={<LoginPage setLoading={setLoading} />} /> 
             </Route>
-            
-           
         </Routes>
     )
 }

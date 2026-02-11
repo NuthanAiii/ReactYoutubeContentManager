@@ -8,9 +8,9 @@ import { fetchData } from '../../services/apiCallSerive'
 import * as apiCallSerive from '../../services/apiCallSerive';
 import Pagination from '../../components/pagination';
 import ContentFilter from '../../components/filter';
-import { get } from 'react-hook-form'
-
-const DashboardPage = () => {
+import { get, set } from 'react-hook-form'
+import Loader from '../../components/loader'
+const DashboardPage = ({ setLoading }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editItem, setEditItem] = useState(null);
     const [viewClicked, setViewClicked] = useState(false);
@@ -78,6 +78,7 @@ const DashboardPage = () => {
 
     
     const getContentData = async (reqdata) => {
+        setLoading(true);
         let numberOfitemsPerPage = 8;
         let skip = (pageNo - 1) * numberOfitemsPerPage;
         let limit = numberOfitemsPerPage;
@@ -94,12 +95,13 @@ const DashboardPage = () => {
 
             let res = await apiCallSerive.fetchDataWithreq('getContent',data,params );
             setData(res.data || []);
-         
+            setLoading(false);
             setotalPages(Math.ceil(res.total / numberOfitemsPerPage));
 
             console.log('Fetched content data:', res);
 
         } catch (error) {
+                setLoading(false);
             console.error('Error fetching content data:', error);
         }
 

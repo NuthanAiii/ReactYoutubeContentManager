@@ -9,7 +9,7 @@ import { loginAsync } from '../../slices/authSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 
 
-const LoginPage = () => {
+const LoginPage = ({ setLoading }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [isSignUp, setIsSignUp] = useState(false);
@@ -29,25 +29,23 @@ const LoginPage = () => {
     });
 
     const onSubmit = async (data) => {
+        if (setLoading) setLoading(true);
         try {
             let params;
             if (!isSignUp) {
-                 params = new URLSearchParams();
+                params = new URLSearchParams();
                 params.append("username", data.userName);
                 params.append("password", data.password);
-            }
-            else{
+            } else {
                 params = {
                     name: data.name,
                     email: data.userName,
                     password: data.password
                 };
             }
-            
 
             if (isSignUp) {
                 const res = await apiCallSerive.postData('signIn', params);
-                // Created but no token - ask user to login or handle response
                 if (res?.access_token) {
                     sessionStorage.setItem('authToken', res.access_token);
                     toast.success('Account created and logged in');
@@ -59,11 +57,9 @@ const LoginPage = () => {
                     setIsSignUp(false);
                 }
             } else {
-                // Use async thunk for login
                 try {
                     const action = await dispatch(loginAsync({ username: data.userName, password: data.password }));
                     const result = unwrapResult(action);
-                    // result is { username, token }
                     sessionStorage.setItem('authToken', result.token);
                     toast.success('Login successful');
                     loginReset();
@@ -73,12 +69,13 @@ const LoginPage = () => {
                     toast.error(message);
                 }
             }
-        }
-        catch (err) {
+        } catch (err) {
             loginReset();
             const message = err?.response?.data?.detail || err.message || (isSignUp ? 'Sign up failed' : 'Login failed');
             console.error('Auth failed:', message);
             toast.error(message);
+        } finally {
+            if (setLoading) setLoading(false);
         }
 
     }
