@@ -18,7 +18,7 @@ const Addcontent = ({ onClose ,refresh,editItem, view }) => {
             type: 'Short',
             script: '',
             publishDate: '',
-            publishTime: '',
+            publishTime: null,
             platform: 'YouTube',
             uploaded: false
         }
@@ -33,7 +33,7 @@ const Addcontent = ({ onClose ,refresh,editItem, view }) => {
                 type: 'Short',
                 script: '',
                 publishDate: '',
-                publishTime: '',
+                publishTime: null,
                 platform: 'YouTube',
                 uploaded: false
             });

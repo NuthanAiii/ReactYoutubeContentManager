@@ -9,6 +9,7 @@ const ContentFilter = ({ onApply }) => {
         handleSubmit,
         reset,
         watch,
+        setValue
     } = useForm({
         defaultValues: {
             search: '',
@@ -22,6 +23,13 @@ const ContentFilter = ({ onApply }) => {
     const onSubmit = (data) => {
         onApply(data)
     }
+const startDate = watch('startDate');
+
+useEffect(() => {
+    if (startDate) {
+        setValue('endDate', '');
+    }
+}, [startDate]);
 
     const onReset = () => {
         const empty = {
@@ -36,7 +44,7 @@ const ContentFilter = ({ onApply }) => {
         onApply(empty)
     }
     useEffect(() => {
-        if (watch('search').length > 3 || watch('search').length === 0) {
+        if (watch('search').length >= 3 || watch('search').length === 0) {
             const timer = setTimeout(() => {
                 onApply({ search: watch('search') });
 
@@ -59,7 +67,7 @@ const ContentFilter = ({ onApply }) => {
             {/* Search */}
             <input
                 type="text"
-                placeholder="Search by title or description"
+                placeholder="Search by title"
                 {...register('search')}
             />
 
@@ -78,10 +86,12 @@ const ContentFilter = ({ onApply }) => {
 
 
             {/* End date */}
-            <input
-                type="date"
-                {...register('endDate')}
-            />
+                            <input
+                                type="date"
+                                {...register('endDate')}
+                                min={watch('startDate') || ''}
+                                
+                            />
 
             {/* Type */}
             <select {...register('type')}>

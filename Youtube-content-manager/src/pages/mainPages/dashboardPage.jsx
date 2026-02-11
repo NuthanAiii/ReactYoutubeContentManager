@@ -148,8 +148,8 @@ const DashboardPage = ({ setLoading }) => {
                           <div className='meta'>
 
                               <p><strong>Platform:</strong> {item.platform}</p>
-                              {item.uploaded && (<p><strong>Published:</strong>{item.publishDate} at {item.publishTime}</p>)}
-                              {!item.uploaded && (<p><strong>Scheduled:</strong> {item.publishDate} at {item.publishTime ? item.publishTime : ''}</p>)}
+                              {item.uploaded && (<p><strong>Published:</strong>{item.publishDate} {item.publishTime ? "at " + item.publishTime : ''}</p>)}
+                              {!item.uploaded && (<p><strong>Scheduled:</strong> {item.publishDate} {item.publishTime ? "at " + item.publishTime : ''}</p>)}
 
                           </div>
 
