@@ -72,3 +72,7 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     email: Optional[str] = None
+
+class changePasswordReq(BaseModel):
+    email: str
+    new_password: str

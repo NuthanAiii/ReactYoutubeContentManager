@@ -36,7 +36,15 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     access_token = create_access_token(data={"sub": user.email, "user_id": user.id}) # In JWT, sub stands for "Subject". here 
     return {"access_token": access_token, "token_type": "bearer"}    
 
-
+@router.post('/changePassword')
+def changePassword(req: schemas.changePasswordReq, db:Session = Depends(get_db)):
+    user = db.query(models.User).filter(models.User.email == req.email).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User Not Found!")
+    
+    user.password = Hash.hash(req.new_password)
+    db.commit()
+    return {"message": "Password changed successfully"}
     
 
 

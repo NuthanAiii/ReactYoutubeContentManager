@@ -35,6 +35,25 @@ const ForgotPassword = () => {
             <form className="forgot-password-form" onSubmit={handleSubmit(onSubmit)}>
                 <h2>Forgot Password</h2>
                 <div className="form-group">
+                    <label htmlFor="email">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter your email"
+                        {...register('email', {
+                            required: 'Email is required',
+                            pattern: {
+                                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                message: 'Enter a valid email address'
+                            }
+                        })}
+                        className={touchedFields.email && errors.email ? 'input-error' : ''}
+                    />
+                    {touchedFields.email && errors.email && (
+                        <span className="error-message">{errors.email.message}</span>
+                    )}
+                </div>
+                <div className="form-group">
                     <label htmlFor="newPassword">New Password</label>
                     <input
                         type="password"
