@@ -2,8 +2,12 @@ import React from 'react';
 import { set, useForm } from 'react-hook-form';
 import './forgotPassword.css';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import * as apiCallSerive from '../services/apiCallSerive';
+import { useState } from 'react';
 
-const ForgotPassword = () => {
+
+const ForgotPassword = ({setLoading}) => {
     const {
         register,
         handleSubmit,
@@ -32,6 +36,7 @@ const ForgotPassword = () => {
             toast.success('Password reset successful. Please login with your new password.');
             sessionStorage.removeItem('authToken');
             navigate('/login');
+            setLoading(false);
             
             
 
