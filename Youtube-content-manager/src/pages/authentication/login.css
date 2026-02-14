@@ -1,3 +1,79 @@
+.login-signup-center {
+  justify-content: center !important;
+}
+/* Login links row for forgot password and signup */
+.login-links-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 8px;
+  margin-top: 4px;
+}
+.login-links-row .link {
+  color: #22d3ee;
+  font-weight: 700;
+  cursor: pointer;
+  background: none;
+  border: none;
+  text-decoration: underline;
+  font-size: 14px;
+  padding: 0 2px;
+  margin: 0;
+  line-height: 1;
+}
+.login-links-row .link:hover {
+  opacity: 0.95;
+}
+/* Login button and forgot password in one row */
+.login-actions-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.login-actions-row .primary {
+  width: auto;
+  min-width: 120px;
+  margin-top: 0;
+}
+.login-actions-row .forgot-password-btn.link {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: underline;
+  color: #22d3ee;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+/* Forgot password link row */
+.forgot-password-link-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+  margin-top: -8px;
+}
+.forgot-password-btn.link {
+  color: #22d3ee;
+  font-weight: 700;
+  cursor: pointer;
+  background: none;
+  border: none;
+  text-decoration: underline;
+  font-size: 14px;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+.forgot-password-btn.link:hover {
+  opacity: 0.95;
+}
 .login-page {
   min-height: 100vh;
   display: flex;

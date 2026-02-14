@@ -160,17 +160,45 @@ const LoginPage = ({ setLoading }) => {
                         type="submit"
                         className='primary'
                         disabled={!isValid}
+                        style={{ width: '100%', marginBottom: '0px' }}
                     >
                         {isSignUp ? 'Sign Up' : 'Login'}
                     </button>
+                    {!isSignUp && (
+                        <>
+                        <div className="login-links-row" style={{ justifyContent: 'center', marginBottom: '2px' }}>
+                            <button
+                                type="button"
+                                className="link forgot-password-btn"
+                                onClick={() => navigate('/forgot-password')}
+                            >
+                                Forgot Password?
+                            </button>
+                        </div>
+                        <div className="login-links-row login-signup-center" style={{ justifyContent: 'center', marginTop: '0', gap: '6px' }}>
+                            <span style={{ color: '#94a3b8', fontSize: '14px' }}>
+                                Don't have an account?
+                            </span>
+                            <button
+                                type="button"
+                                className="link signup-btn"
+                                onClick={() => { setIsSignUp(true); loginReset(); }}
+                            >
+                                Sign Up
+                            </button>
+                        </div>
+                        </>
+                    )}
                 </form>
                 <div className='form-footer'>
-                    <p className='toggle'>
-                        {isSignUp ? 'Already have an account?' : "Don't have an account?"}
-                        <button type='button' className='link' onClick={() => { setIsSignUp(!isSignUp); loginReset(); }}>
-                            {isSignUp ? ' Login' : ' Sign Up'}
-                        </button>
-                    </p>
+                    {isSignUp ? (
+                        <p className='toggle'>
+                            Already have an account?
+                            <button type='button' className='link' onClick={() => { setIsSignUp(false); loginReset(); }}>
+                                Login
+                            </button>
+                        </p>
+                    ) : null}
                     <p className='hint'>{isSignUp ? 'Create your account to start managing content.' : 'Demo flow: click login to view the dashboard.'}</p>
                 </div>
             </div>

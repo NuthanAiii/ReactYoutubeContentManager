@@ -1,5 +1,5 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { set, useForm } from 'react-hook-form';
 import './forgotPassword.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,11 +20,19 @@ const ForgotPassword = () => {
     const newPassword = watch('newPassword');
     const confirmPassword = watch('confirmPassword');
 
-    const onSubmit = (data) => {
+    const onSubmit = async(data) => {
+        setLoading(true);
         
             // onSave(data.newPassword)
-            navigate('/login');
+            const payload = {
+                email: data.email,
+                newPassword: data.newPassword
+            }
+            await apiCallSerive.postData('forgot-password', payload);
+            toast.success('Password reset successful. Please login with your new password.');
             sessionStorage.removeItem('authToken');
+            navigate('/login');
+            
             
 
         

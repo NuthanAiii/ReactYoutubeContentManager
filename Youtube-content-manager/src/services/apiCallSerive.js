@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const API_BASE_URL = import.meta.env.VITE_local_base_url;
-const API_BASE_URL = import.meta.env.VITE_production_base_url;
+const API_BASE_URL = import.meta.env.VITE_local_base_url;
+// const API_BASE_URL = import.meta.env.VITE_production_base_url;
   
 const api = axios.create({
     baseURL: API_BASE_URL,
@@ -21,7 +21,6 @@ const createConfig = (data) =>{
     const headers = {};
 
     if (data instanceof FormData) {
-      // For FormData, do NOT set Content-Type so browser/axios can set the boundary
     } else if (data instanceof URLSearchParams) {
       headers['Content-Type'] = 'application/x-www-form-urlencoded';
     } else {
@@ -73,9 +72,7 @@ export const fetchDataWithreq = async (endpoint, data,param) => {
 
 export const postData = async (endpoint, data) => {
   try {
-    // Build headers purely from 'data' (no config param expected)
     const headers = createConfig(data);
-
     const response = await api.post(endpoint, data, { headers });
     return response.data;
   } catch (error) {
