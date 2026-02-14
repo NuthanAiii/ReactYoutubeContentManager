@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_BASE_URL = import.meta.env.VITE_local_base_url;
-// const API_BASE_URL = import.meta.env.VITE_production_base_url;
+// const API_BASE_URL = import.meta.env.VITE_local_base_url;
+const API_BASE_URL = import.meta.env.VITE_production_base_url;
   
 const api = axios.create({
     baseURL: API_BASE_URL,
