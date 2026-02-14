@@ -34,7 +34,7 @@ const ForgotPassword = ({setLoading}) => {
                 new_password: data.newPassword
             }
             try{
-                await apiCallSerive.postData('reset-password', payload);
+                await apiCallSerive.postData('changePassword', payload);
                  toast.success('Password reset successful. Please login with your new password.');
             sessionStorage.removeItem('authToken');
             navigate('/login');
