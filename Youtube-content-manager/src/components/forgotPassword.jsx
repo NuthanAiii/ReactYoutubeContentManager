@@ -12,6 +12,7 @@ const ForgotPassword = ({setLoading}) => {
         register,
         handleSubmit,
         watch,
+        reset,
         formState: { errors, isValid, touchedFields }
     } = useForm({
         mode: 'onChange',
@@ -32,11 +33,23 @@ const ForgotPassword = ({setLoading}) => {
                 email: data.email,
                 new_password: data.newPassword
             }
-            await apiCallSerive.postData('changePassword', payload);
-            toast.success('Password reset successful. Please login with your new password.');
+            try{
+                await apiCallSerive.postData('reset-password', payload);
+                 toast.success('Password reset successful. Please login with your new password.');
             sessionStorage.removeItem('authToken');
             navigate('/login');
             setLoading(false);
+            reset();
+            }
+            catch(error){
+                const message = error?.response?.data?.detail || error.message || 'Password reset failed';
+                toast.error(message);
+                setLoading(false);
+                reset();
+                return;
+            }
+            
+           
             
             
 
