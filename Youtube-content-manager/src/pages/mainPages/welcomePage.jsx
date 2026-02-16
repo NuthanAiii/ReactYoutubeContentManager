@@ -10,7 +10,7 @@ const WelcomePage =({ setLoading })=>{
         <div className='welcome-page'>
             <div className='welcome-card'>
                 <p className='eyebrow'>Creator Control Center</p>
-                <h1>Welcome to the Youtube Content Manager</h1>
+                <h1>Welcome to the Media Content Manager</h1>
                 <p className='subtext'>
                     Plan, track, and launch your videos with a clean, simple dashboard.
                 </p>
