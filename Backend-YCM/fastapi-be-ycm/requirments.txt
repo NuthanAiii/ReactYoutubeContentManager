@@ -9,3 +9,8 @@ cryptography
 python-jose
 python-multipart
 psycopg2-binary
+langchain
+langchain-community
+langchain-google-genai
+google-generativeai
+tiktoken
