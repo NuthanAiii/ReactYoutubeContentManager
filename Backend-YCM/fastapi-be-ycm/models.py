@@ -1,8 +1,9 @@
-import email
+
 from database import Base
 from sqlalchemy import Boolean, Column, Integer, String, table, true, JSON, text
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy import Date, Time
+from sqlalchemy import Date, Time, ForeignKey, Text
+from pgvector.sqlalchemy import Vector
 # over all this fine model is used to create the table
 class Data(Base):
     __tablename__ = "Content"
@@ -30,3 +31,10 @@ class User(Base):
     password = Column(String, index=True)
 
           
+class VectorDB(Base):
+    __tablename__ = "Vectors"
+    id = Column(Integer, primary_key=True, index=True)
+    content_id = Column(Integer, index=True, ForeignKey("Content.id"))
+    user_id = Column(Integer, index=True)
+    chunk_text = Column(Text)
+    embedding = Column(Vector(768)) 

@@ -7,6 +7,7 @@ from fastapi import Query
 from datetime import date
 from routers.outh2 import get_current_user
 from typing import Optional, List
+from ragimp.contentrag import text_splitter, embeddings, FAISS
 
 router = APIRouter(tags=['content'])
 
@@ -66,6 +67,15 @@ def setContent(req: schemas.Content, db: Session = Depends(get_db), user: schema
     db.add(new_content)
     db.commit()
     db.refresh(new_content)
+    text = "\n".join([f"{k}:{v}" for k,v in {**req.model_dump(), "user_id": user_id}.items()])
+    chunks = text_splitter.split_text(text)
+    vectors = embeddings.embed_documents(chunks)
+    for chunk, vector in zip(chunks, vectors):
+        new_vector = models.VectorDB(content_id=new_content.id, user_id=user_id, chunk_text=chunk, embedding=vector)
+        db.add(new_vector)
+    db.commit()
+    
+    
     return new_content
 @router.post("/deleteContent")
 def deleteContent(req: schemas.deleteContentReq, db: Session = Depends(get_db), user: schemas.GetUser = Depends(get_current_user) ):

@@ -11,5 +11,6 @@ load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 llm = GoogleGenerativeAI(api_key=GOOGLE_API_KEY,temperature=0.2,model="gemini-1.5-flash",max_output_tokens=512)
-embeddings = GoogleGenerativeAIEmbeddings(api_key=GOOGLE_API_KEY,model="gemini-1.5-flash")
+embeddings = GoogleGenerativeAIEmbeddings(api_key=GOOGLE_API_KEY,model="text-embedding-004")
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+

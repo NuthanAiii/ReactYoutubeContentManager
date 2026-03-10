@@ -14,3 +14,6 @@ langchain-community
 langchain-google-genai
 google-generativeai
 tiktoken
+pgvector
+python-dotenv
+faiss-cpu
