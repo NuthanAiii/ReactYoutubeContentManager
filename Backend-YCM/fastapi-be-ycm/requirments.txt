@@ -10,9 +10,10 @@ python-jose
 python-multipart
 psycopg2-binary
 langchain
+langchain-text-splitters
 langchain-community
-langchain-google-genai
-google-generativeai
+langchain-google-genai>=2.0.0
+google-generativeai>=0.8.0
 tiktoken
 pgvector
 python-dotenv

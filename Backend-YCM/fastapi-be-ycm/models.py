@@ -34,7 +34,7 @@ class User(Base):
 class VectorDB(Base):
     __tablename__ = "Vectors"
     id = Column(Integer, primary_key=True, index=True)
-    content_id = Column(Integer, index=True, ForeignKey("Content.id"))
+    content_id = Column(Integer, ForeignKey("Content.id"), index=True)
     user_id = Column(Integer, index=True)
     chunk_text = Column(Text)
-    embedding = Column(Vector(768)) 
+    embedding = Column(Vector(3072)) 

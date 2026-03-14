@@ -7,7 +7,7 @@ from fastapi import Query
 from datetime import date
 from routers.outh2 import get_current_user
 from typing import Optional, List
-from ragimp.contentrag import text_splitter, embeddings, FAISS
+from ragimp.contentrag import text_splitter, embeddings
 
 router = APIRouter(tags=['content'])
 
@@ -70,6 +70,7 @@ def setContent(req: schemas.Content, db: Session = Depends(get_db), user: schema
     text = "\n".join([f"{k}:{v}" for k,v in {**req.model_dump(), "user_id": user_id}.items()])
     chunks = text_splitter.split_text(text)
     vectors = embeddings.embed_documents(chunks)
+   
     for chunk, vector in zip(chunks, vectors):
         new_vector = models.VectorDB(content_id=new_content.id, user_id=user_id, chunk_text=chunk, embedding=vector)
         db.add(new_vector)
@@ -82,8 +83,12 @@ def deleteContent(req: schemas.deleteContentReq, db: Session = Depends(get_db), 
     user_id = user.id
     data = db.query(models.Data).filter(models.Data.user_id == user_id)
     content = data.filter(models.Data.id == req.id).first()
+    vecData = db.query(models.VectorDB).filter(models.VectorDB.user_id == user_id)
+    vecContent = vecData.filter(models.VectorDB.content_id == req.id).all()
     if content:
         db.delete(content)
+        for vec in vecContent:
+            db.delete(vec)
         db.commit()
         return {"message": "Content deleted successfully"}
     else:
@@ -93,11 +98,21 @@ def deleteContent(req: schemas.deleteContentReq, db: Session = Depends(get_db), 
 def updateContent(req: schemas.GetContent, db: Session = Depends(get_db), user: schemas.GetUser = Depends(get_current_user) ):
     user_id = user.id
     data = db.query(models.Data).filter(models.Data.user_id == user_id)
+    vecData = db.query(models.VectorDB).filter(models.VectorDB.user_id == user_id)
+
     content = data.filter(models.Data.id == req.id).first()
     if content:
+        vecContent = vecData.filter(models.VectorDB.content_id == req.id).all()
+        for vec in vecContent:
+            db.delete(vec)
+        text = "\n".join([f"{k}:{v}" for k,v in {**req.model_dump(),"user_id":user_id}.items()])
+        chunks = text_splitter.split_text(text)
+        vectors = embeddings.embed_documents(chunks)
+        for chunk, vector in zip(chunks,vectors):
+            new_vector = models.VectorDB(content_id=req.id, user_id=user_id, chunk_text=chunk, embedding=vector)
+            db.add(new_vector)
         for key, value in req.model_dump().items():
             setattr(content, key, value)
-        
         db.commit()
         db.refresh(content)
         return content

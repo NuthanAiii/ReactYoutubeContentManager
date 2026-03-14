@@ -2,6 +2,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
+from dotenv import load_dotenv
+load_dotenv()
 #
 # over all this fine database is used to create the connection to the database
 #if we get database url from environment variable then we use that otherwise we use sqlite database
