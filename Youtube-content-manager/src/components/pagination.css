@@ -1,53 +1,78 @@
 .pagination {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   align-items: center;
-  margin-top: 16px;
+  justify-content: center;
+  margin-top: 28px;
+  padding-bottom: 8px;
   flex-wrap: wrap;
 }
 
 .page-btn {
-  background: rgba(148,163,184,0.06);
-  color: #e2e8f0;
-  border: 1px solid rgba(148,163,184,0.08);
-  padding: 8px 12px;
+  background: rgba(167, 139, 250, 0.07);
+  color: #c4b5fd;
+  border: 1px solid rgba(167, 139, 250, 0.14);
+  padding: 8px 14px;
   border-radius: 8px;
   font-weight: 600;
+  font-size: 13px;
   cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  min-height: 36px;
+}
+
+.page-btn:hover:not(:disabled) {
+  background: rgba(167, 139, 250, 0.14);
+  color: #e2e8f0;
+  transform: translateY(-1px);
 }
 
 .page-btn:disabled {
-  opacity: 0.45;
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
 .page-number {
   background: transparent;
-  border: 1px solid rgba(148,163,184,0.06);
-  color: #cbd5e1;
-  padding: 8px 10px;
+  border: 1px solid rgba(167, 139, 250, 0.1);
+  color: #94a3b8;
+  padding: 8px 12px;
   border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
+  min-height: 36px;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.page-number:hover {
+  background: rgba(167, 139, 250, 0.08);
+  color: #c4b5fd;
 }
 
 .page-number.active {
-  background: linear-gradient(120deg, #22d3ee, #0ea5e9);
-  color: #06202a;
-  border: none;
+  background: linear-gradient(120deg, #a855f7, #7c3aed);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.4);
 }
 
 .page-ellipsis {
-  color: #94a3b8;
-  padding: 0 6px;
+  color: #6b5f8a;
+  padding: 0 4px;
+  font-size: 13px;
+  user-select: none;
 }
 
 .page-info {
-  margin-left: 8px;
-  color: #94a3b8;
-  font-size: 13px;
+  margin-left: 10px;
+  color: #6b5f8a;
+  font-size: 12px;
+  white-space: nowrap;
 }
 
 @media (max-width: 480px) {
-  .pagination { gap: 6px; }
+  .pagination { gap: 4px; margin-top: 20px; }
   .page-info { display: none; }
+  .page-btn, .page-number { padding: 7px 10px; font-size: 12px; }
 }

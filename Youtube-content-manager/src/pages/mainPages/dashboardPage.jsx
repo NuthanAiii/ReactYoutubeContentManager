@@ -137,7 +137,7 @@ const DashboardPage = ({ setLoading }) => {
               <div className='dashboard-grid'>
                 
                 {data.map(item => {
-                  return (<div key={item.id} className='dashboard-card'>
+                  return (<div key={item.id} className={`dashboard-card ${item.type === 'Short' ? 'card-short' : 'card-long'}`}>
                       <div className='card-badge'>
                           <span className={`pill ${item.type === "Short" ? 'pill-short' : 'pill-long'}`}>{item.type}</span>
                           <span className={`pill ${item.uploaded ? 'pill-live' : 'pill-draft'}`}>{item.uploaded ? 'Uploaded' : 'Draft'}</span>
@@ -192,7 +192,7 @@ const DashboardPage = ({ setLoading }) => {
            {data.length > 0 && (<div className="add-content-button-container">
                 <button className="add-content-button" onClick={handleAddContent}>
                     <span className="add-content-icon">+</span>
-                    Add Content
+                    <span className="add-content-label">Add Content</span>
                 </button>
 
             </div>)} 

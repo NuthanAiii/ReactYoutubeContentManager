@@ -5,7 +5,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
@@ -17,12 +17,8 @@
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 .add-content-modal {
@@ -33,49 +29,44 @@
   overflow-y: auto;
   animation: slideUp 0.3s ease;
   scrollbar-width: thin;
-  scrollbar-color: rgba(148, 163, 184, 0.3) rgba(15, 23, 42, 0.5);
+  scrollbar-color: rgba(167, 139, 250, 0.3) rgba(18, 12, 35, 0.5);
 }
 
 .add-content-modal::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .add-content-modal::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.5);
-  border-radius: 4px;
+  background: rgba(18, 12, 35, 0.5);
+  border-radius: 3px;
 }
 
 .add-content-modal::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.3);
-  border-radius: 4px;
+  background: rgba(167, 139, 250, 0.3);
+  border-radius: 3px;
 }
 
 .add-content-modal::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.5);
+  background: rgba(167, 139, 250, 0.5);
 }
 
 @keyframes slideUp {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
 }
 
 .add-content-container {
   width: 100%;
   padding: 48px;
-  background: linear-gradient(145deg, rgba(30, 41, 59, 0.98), rgba(15, 23, 42, 0.98));
-  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: linear-gradient(145deg, rgba(28, 18, 55, 0.98), rgba(18, 12, 35, 0.98));
+  border: 1px solid rgba(167, 139, 250, 0.18);
   border-radius: 24px;
-  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(12px);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(14px);
   position: relative;
 }
 
+/* Close Button */
 .modal-close-button {
   position: absolute;
   top: 20px;
@@ -84,7 +75,7 @@
   height: 40px;
   border-radius: 50%;
   border: none;
-  background: rgba(148, 163, 184, 0.15);
+  background: rgba(167, 139, 250, 0.1);
   color: #e2e8f0;
   font-size: 28px;
   line-height: 1;
@@ -106,6 +97,7 @@
   transform: rotate(90deg) scale(0.95);
 }
 
+/* Form Header */
 .form-header {
   margin-bottom: 32px;
 }
@@ -113,7 +105,10 @@
 .form-header h1 {
   font-size: 32px;
   margin-bottom: 8px;
-  color: #f8fafc;
+  background: linear-gradient(120deg, #f8fafc 0%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   line-height: 1.2;
 }
 
@@ -121,7 +116,7 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-size: 12px;
-  color: #94a3b8;
+  color: #a78bfa;
   margin-bottom: 8px;
 }
 
@@ -130,6 +125,7 @@
   margin-bottom: 0;
 }
 
+/* Form Layout */
 .content-form {
   display: flex;
   flex-direction: column;
@@ -160,8 +156,8 @@
 .form-group textarea {
   padding: 12px 14px;
   border-radius: 12px;
-  border: 1px solid rgba(148, 163, 184, 0.3);
-  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  background: rgba(18, 12, 35, 0.6);
   color: #e2e8f0;
   font-size: 14px;
   font-family: inherit;
@@ -171,9 +167,9 @@
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-  outline: 2px solid rgba(14, 165, 233, 0.6);
+  outline: 2px solid rgba(168, 85, 247, 0.5);
   border-color: transparent;
-  background: rgba(15, 23, 42, 0.8);
+  background: rgba(18, 12, 35, 0.85);
 }
 
 .form-group textarea {
@@ -185,7 +181,7 @@
 .form-group select {
   cursor: pointer;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a78bfa' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 14px center;
   padding-right: 40px;
@@ -204,8 +200,8 @@
   cursor: pointer;
   padding: 14px 20px;
   border-radius: 12px;
-  border: 2px solid rgba(148, 163, 184, 0.3);
-  background: rgba(15, 23, 42, 0.6);
+  border: 2px solid rgba(167, 139, 250, 0.2);
+  background: rgba(18, 12, 35, 0.6);
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
@@ -220,43 +216,43 @@
 }
 
 .type-option span {
-  color: #cbd5e1;
+  color: #94a3b8;
   font-weight: 600;
   font-size: 14px;
   pointer-events: none;
 }
 
 .type-option:hover {
-  border-color: rgba(148, 163, 184, 0.5);
-  background: rgba(15, 23, 42, 0.8);
+  border-color: rgba(167, 139, 250, 0.35);
+  background: rgba(18, 12, 35, 0.8);
 }
 
 .type-option.active.type-short {
-  border-color: rgba(34, 211, 238, 0.6);
-  background: rgba(34, 211, 238, 0.12);
+  border-color: rgba(168, 85, 247, 0.6);
+  background: rgba(168, 85, 247, 0.1);
 }
 
 .type-option.active.type-short span {
-  color: #22d3ee;
+  color: #a855f7;
 }
 
 .type-option.active.type-long {
-  border-color: rgba(249, 115, 22, 0.6);
-  background: rgba(249, 115, 22, 0.12);
+  border-color: rgba(236, 72, 153, 0.6);
+  background: rgba(236, 72, 153, 0.1);
 }
 
 .type-option.active.type-long span {
-  color: #fb923c;
+  color: #ec4899;
 }
 
-/* Form Row for Date and Time */
+/* Form Row */
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
 
-/* Checkbox Styling */
+/* Checkbox */
 .checkbox-group {
   margin-top: 8px;
 }
@@ -268,14 +264,14 @@
   cursor: pointer;
   padding: 12px;
   border-radius: 12px;
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(167, 139, 250, 0.18);
+  background: rgba(18, 12, 35, 0.4);
   transition: all 0.2s ease;
 }
 
 .checkbox-label:hover {
-  background: rgba(15, 23, 42, 0.6);
-  border-color: rgba(148, 163, 184, 0.3);
+  background: rgba(18, 12, 35, 0.6);
+  border-color: rgba(167, 139, 250, 0.28);
 }
 
 .checkbox-label input[type="checkbox"] {
@@ -290,15 +286,15 @@
   position: relative;
   width: 20px;
   height: 20px;
-  border: 2px solid rgba(148, 163, 184, 0.4);
+  border: 2px solid rgba(167, 139, 250, 0.35);
   border-radius: 6px;
-  background: rgba(15, 23, 42, 0.6);
+  background: rgba(18, 12, 35, 0.6);
   transition: all 0.2s ease;
   flex-shrink: 0;
 }
 
 .checkbox-label input[type="checkbox"]:checked + .checkmark {
-  background: linear-gradient(120deg, #22d3ee, #0ea5e9);
+  background: linear-gradient(120deg, #a855f7, #7c3aed);
   border-color: transparent;
 }
 
@@ -310,7 +306,7 @@
   top: 2px;
   width: 5px;
   height: 10px;
-  border: solid #0b1221;
+  border: solid #ffffff;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
@@ -331,14 +327,14 @@
   gap: 12px;
   margin-top: 8px;
   padding-top: 24px;
-  border-top: 1px solid rgba(148, 163, 184, 0.15);
+  border-top: 1px solid rgba(167, 139, 250, 0.12);
 }
 
 .form-actions .ghost {
   flex: 1;
-  background: rgba(148, 163, 184, 0.1);
+  background: rgba(167, 139, 250, 0.08);
   color: #e2e8f0;
-  border: 1px solid rgba(148, 163, 184, 0.3);
+  border: 1px solid rgba(167, 139, 250, 0.2);
   padding: 12px 18px;
   border-radius: 12px;
   font-weight: 600;
@@ -349,25 +345,25 @@
 .form-actions .ghost:hover {
   opacity: 0.9;
   transform: translateY(-1px);
-  background: rgba(148, 163, 184, 0.15);
+  background: rgba(167, 139, 250, 0.13);
 }
 
 .form-actions .primary {
   flex: 2;
-  background: linear-gradient(120deg, #22d3ee, #0ea5e9);
-  color: #0b1221;
+  background: linear-gradient(120deg, #a855f7, #7c3aed);
+  color: #ffffff;
   border: none;
   padding: 12px 18px;
   border-radius: 12px;
   font-weight: 700;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
-  box-shadow: 0 12px 30px rgba(34, 211, 238, 0.25);
+  box-shadow: 0 12px 30px rgba(168, 85, 247, 0.3);
 }
 
 .form-actions .primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 18px 38px rgba(34, 211, 238, 0.35);
+  box-shadow: 0 18px 40px rgba(168, 85, 247, 0.45);
 }
 
 .form-actions .primary:active {
@@ -375,7 +371,7 @@
   opacity: 0.9;
 }
 
-/* Responsive Design */
+/* ── Responsive ── */
 @media (max-width: 768px) {
   .add-content-modal-overlay {
     padding: 16px;
@@ -494,7 +490,7 @@
   .form-group select,
   .form-group textarea {
     padding: 11px 12px;
-    font-size: 16px; /* Prevents zoom on iOS */
+    font-size: 16px;
     border-radius: 10px;
   }
 

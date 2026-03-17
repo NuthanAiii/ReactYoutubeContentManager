@@ -1,21 +1,33 @@
 .da-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(2,6,23,0.6);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 60;
+  animation: daFadeIn 0.15s ease;
+}
+
+@keyframes daFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 .da-modal {
-  background: rgba(15,23,42,0.98);
-  border-radius: 12px;
-  padding: 20px;
+  background: rgba(18, 12, 35, 0.98);
+  border-radius: 14px;
+  padding: 24px;
   width: 100%;
   max-width: 420px;
-  border: 1px solid rgba(148,163,184,0.08);
-  box-shadow: 0 12px 40px rgba(2,6,23,0.6);
+  border: 1px solid rgba(167, 139, 250, 0.15);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.7);
+  animation: daSlideUp 0.2s ease;
+}
+
+@keyframes daSlideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .da-title {
@@ -26,7 +38,8 @@
 
 .da-message {
   color: #cbd5e1;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
+  line-height: 1.5;
 }
 
 .da-actions {
@@ -35,9 +48,8 @@
   justify-content: flex-end;
 }
 
-/* re-use existing .ghost and .primary styles from dashboard; ensure adequate spacing on small screens */
 @media (max-width: 480px) {
-  .da-modal { padding: 16px; }
+  .da-modal { padding: 20px 16px; }
   .da-actions { flex-direction: column; }
   .da-actions button { width: 100%; }
 }

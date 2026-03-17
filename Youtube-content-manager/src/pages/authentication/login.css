@@ -1,7 +1,8 @@
 .login-signup-center {
   justify-content: center !important;
 }
-/* Login links row for forgot password and signup */
+
+/* Login links row */
 .login-links-row {
   display: flex;
   flex-direction: row;
@@ -11,8 +12,9 @@
   margin-bottom: 8px;
   margin-top: 4px;
 }
+
 .login-links-row .link {
-  color: #22d3ee;
+  color: #a855f7;
   font-weight: 700;
   cursor: pointer;
   background: none;
@@ -23,10 +25,12 @@
   margin: 0;
   line-height: 1;
 }
+
 .login-links-row .link:hover {
-  opacity: 0.95;
+  opacity: 0.85;
 }
-/* Login button and forgot password in one row */
+
+/* Login button + forgot password row */
 .login-actions-row {
   display: flex;
   flex-direction: row;
@@ -35,23 +39,26 @@
   gap: 12px;
   margin-bottom: 8px;
 }
+
 .login-actions-row .primary {
   width: auto;
   min-width: 120px;
   margin-top: 0;
 }
+
 .login-actions-row .forgot-password-btn.link {
   margin: 0;
   font-size: 14px;
   font-weight: 700;
   text-decoration: underline;
-  color: #22d3ee;
+  color: #a855f7;
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
   line-height: 1;
 }
+
 /* Forgot password link row */
 .forgot-password-link-row {
   display: flex;
@@ -59,8 +66,9 @@
   margin-bottom: 8px;
   margin-top: -8px;
 }
+
 .forgot-password-btn.link {
-  color: #22d3ee;
+  color: #a855f7;
   font-weight: 700;
   cursor: pointer;
   background: none;
@@ -71,9 +79,12 @@
   margin: 0;
   line-height: 1;
 }
+
 .forgot-password-btn.link:hover {
-  opacity: 0.95;
+  opacity: 0.85;
 }
+
+/* Page */
 .login-page {
   min-height: 100vh;
   display: flex;
@@ -82,21 +93,25 @@
   padding: 48px 24px;
 }
 
+/* Card */
 .login-card {
   width: 100%;
   max-width: 520px;
   padding: 40px;
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(18, 12, 35, 0.9);
+  border: 1px solid rgba(167, 139, 250, 0.18);
   border-radius: 20px;
-  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px);
 }
 
 .login-header h1 {
   font-size: 30px;
   margin-bottom: 8px;
-  color: #f8fafc;
+  background: linear-gradient(120deg, #f8fafc 0%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .login-header .eyebrow {
@@ -107,6 +122,7 @@
   margin-bottom: 24px;
 }
 
+/* Form */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -122,14 +138,16 @@
 .form-group input {
   padding: 12px 14px;
   border-radius: 12px;
-  border: 1px solid rgba(148, 163, 184, 0.3);
-  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  background: rgba(18, 12, 35, 0.6);
   color: #e2e8f0;
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 .form-group input:focus {
-  outline: 2px solid rgba(14, 165, 233, 0.6);
+  outline: 2px solid rgba(168, 85, 247, 0.5);
   border-color: transparent;
+  background: rgba(18, 12, 35, 0.8);
 }
 
 .form-group input.input-error {
@@ -152,14 +170,8 @@
 }
 
 @keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .login-card .primary {
@@ -174,7 +186,7 @@
   text-align: center;
 }
 
-/* Footer area for toggle and hint */
+/* Footer */
 .form-footer {
   margin-top: 14px;
   display: flex;
@@ -194,35 +206,36 @@
 .form-footer .link {
   background: none;
   border: none;
-  color: #22d3ee;
+  color: #a855f7;
   font-weight: 700;
   cursor: pointer;
   padding: 0;
   margin-left: 6px;
-  margin-top: 0px;
+  margin-top: 0;
   text-decoration: underline;
   line-height: 1;
 }
 
 .form-footer .link:hover {
-  opacity: 0.95;
+  opacity: 0.85;
 }
 
+/* Primary button */
 .primary {
-  background: linear-gradient(120deg, #22d3ee, #0ea5e9);
-  color: #0b1221;
+  background: linear-gradient(120deg, #a855f7, #7c3aed);
+  color: #ffffff;
   border: none;
   padding: 12px 18px;
   border-radius: 12px;
   font-weight: 700;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
-  box-shadow: 0 12px 30px rgba(34, 211, 238, 0.25);
+  box-shadow: 0 12px 30px rgba(168, 85, 247, 0.3);
 }
 
 .primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 18px 38px rgba(34, 211, 238, 0.35);
+  box-shadow: 0 18px 38px rgba(168, 85, 247, 0.45);
 }
 
 .primary:active {
@@ -231,17 +244,18 @@
 }
 
 .primary:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
   transform: none;
-  box-shadow: 0 8px 20px rgba(34, 211, 238, 0.15);
+  box-shadow: 0 8px 20px rgba(168, 85, 247, 0.15);
 }
 
 .primary:disabled:hover {
   transform: none;
-  box-shadow: 0 8px 20px rgba(34, 211, 238, 0.15);
+  box-shadow: 0 8px 20px rgba(168, 85, 247, 0.15);
 }
 
+/* Typography helpers */
 .eyebrow {
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -301,7 +315,7 @@
 
   .form-group input {
     padding: 11px 12px;
-    font-size: 16px; /* Prevents zoom on iOS */
+    font-size: 16px;
   }
 
   .error-message {

@@ -1,9 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  color: #0f172a;
-  background: #0b1221;
+  color: #0d0a1a;
+  background: #0d0a1a;
 }
 
 * {
@@ -14,9 +18,11 @@
 
 body {
   min-height: 100vh;
-  background: radial-gradient(circle at 20% 20%, rgba(94, 234, 212, 0.05), transparent 25%),
-              radial-gradient(circle at 80% 0%, rgba(94, 234, 212, 0.08), transparent 30%),
-              #0b1221;
+  background:
+    radial-gradient(ellipse at 15% 10%, rgba(168, 85, 247, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 5%,  rgba(124, 58, 237, 0.10) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 95%, rgba(168, 85, 247, 0.07) 0%, transparent 50%),
+    #0d0a1a;
   color: #e2e8f0;
 }
 
@@ -25,8 +31,24 @@ a {
   text-decoration: none;
 }
 
-button, input {
+button, input, select, textarea {
   font-family: inherit;
+}
+
+/* Global custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(18, 12, 35, 0.5);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.25);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.45);
 }
 
 /* Mobile Responsive Global Styles */

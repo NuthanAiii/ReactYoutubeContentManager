@@ -65,33 +65,35 @@ useEffect(() => {
         >
 
             {/* Search */}
-            <input
-                type="text"
-                placeholder="Search by title"
-                {...register('search')}
-            />
+            <div className="filter-search">
+                <input
+                    type="text"
+                    placeholder="Search by title…"
+                    {...register('search')}
+                />
+            </div>
 
+            <div className="filter-divider" />
 
-            {/* Start date */}
-            <input
-                type="date"
-                {...register('startDate')}
-            />
-            {watch('search').length > 0 && (<button type="button" onClick={() => {
-                reset({ ...watch(), search: "" });
-                onApply({ ...watch(), search: "" });
-            }}>
-                Clear Search
-            </button>)}
+            {/* Date range */}
+            <div className="filter-date-group">
+                <span className="filter-date-label">From</span>
+                <input
+                    type="date"
+                    {...register('startDate')}
+                />
+            </div>
 
+            <div className="filter-date-group">
+                <span className="filter-date-label">To</span>
+                <input
+                    type="date"
+                    {...register('endDate')}
+                    min={watch('startDate') || ''}
+                />
+            </div>
 
-            {/* End date */}
-                            <input
-                                type="date"
-                                {...register('endDate')}
-                                min={watch('startDate') || ''}
-                                
-                            />
+            <div className="filter-divider" />
 
             {/* Type */}
             <select {...register('type')}>
@@ -100,41 +102,53 @@ useEffect(() => {
                 <option value="Long">Long</option>
             </select>
 
-            {/* Status */}
-            <label>
-                <input
-                    type="radio"
-                    value="uploaded"
-                    {...register("status")}
-                />
-                Uploaded
-            </label>
+            <div className="filter-divider" />
 
-            <label>
-                <input
-                    type="radio"
-                    value="scheduled"
-                    {...register("status")}
-                />
-                Scheduled
-            </label>
-            <label>
-                <input
-                    type="radio"
-                    value="overDue"
-                    {...register("status")}
-                />
-                Overdue
-            </label>
+            {/* Status radio buttons */}
+            <div className="filter-radio-group">
+                <label>
+                    <input
+                        type="radio"
+                        value="uploaded"
+                        {...register("status")}
+                    />
+                    <span>Uploaded</span>
+                </label>
 
+                <label>
+                    <input
+                        type="radio"
+                        value="scheduled"
+                        {...register("status")}
+                    />
+                    <span>Scheduled</span>
+                </label>
 
-            <button type="submit">
-                Apply
-            </button>
+                <label>
+                    <input
+                        type="radio"
+                        value="overDue"
+                        {...register("status")}
+                    />
+                    <span>Overdue</span>
+                </label>
+            </div>
 
-            <button type="button" onClick={onReset}>
-                Reset
-            </button>
+            <div className="filter-divider" />
+
+            {/* Action buttons */}
+            <div className="filter-actions">
+                {watch('search').length > 0 && (
+                    <button type="button" className="filter-clear" onClick={() => {
+                        reset({ ...watch(), search: "" });
+                        onApply({ ...watch(), search: "" });
+                    }}>
+                        Clear
+                    </button>
+                )}
+                <button type="submit" className="filter-apply">Apply</button>
+                <button type="button" className="filter-reset" onClick={onReset}>Reset</button>
+            </div>
 
         </form>
     )

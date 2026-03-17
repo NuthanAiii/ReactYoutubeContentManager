@@ -1,85 +1,242 @@
 .content-filter {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
-  padding: 12px 14px;
-  margin-bottom: 16px;
-
-  background: rgba(15, 23, 42, 0.55);
-  border: 1px solid rgba(148, 163, 184, 0.08);
-  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  background: rgba(18, 12, 35, 0.75);
+  border: 1px solid rgba(167, 139, 250, 0.12);
+  border-radius: 14px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
 
-/* inputs & select */
+/* Search input */
+.filter-search {
+  flex: 1 1 180px;
+  min-width: 150px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
 
-.content-filter input[type="text"],
+.filter-search input[type="text"] {
+  width: 100%;
+  background: rgba(167, 139, 250, 0.06);
+  border: 1px solid rgba(167, 139, 250, 0.14);
+  color: #e5e7eb;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  outline: none;
+  min-height: 36px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.filter-search input[type="text"]:focus {
+  border-color: rgba(168, 85, 247, 0.45);
+  background: rgba(167, 139, 250, 0.1);
+}
+
+/* Date groups */
+.filter-date-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-date-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #7c6faa;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Shared input / select */
 .content-filter input[type="date"],
 .content-filter select {
-  background: rgba(148, 163, 184, 0.06);
-  border: 1px solid rgba(148, 163, 184, 0.08);
+  background: rgba(167, 139, 250, 0.06);
+  border: 1px solid rgba(167, 139, 250, 0.14);
   color: #e5e7eb;
-
   padding: 8px 10px;
   border-radius: 8px;
   font-size: 13px;
   outline: none;
-  min-height: 34px;
-}
-
-.content-filter select {
+  min-height: 36px;
+  transition: border-color 0.2s ease, background 0.2s ease;
   cursor: pointer;
 }
 
-/* placeholder */
-
-.content-filter input::placeholder {
-  color: #94a3b8;
+.content-filter input[type="date"]:focus,
+.content-filter select:focus {
+  border-color: rgba(168, 85, 247, 0.45);
+  background: rgba(167, 139, 250, 0.1);
 }
 
-/* checkbox labels */
+/* Divider */
+.filter-divider {
+  width: 1px;
+  height: 24px;
+  background: rgba(167, 139, 250, 0.1);
+  flex-shrink: 0;
+}
+
+/* Radio group */
+.filter-radio-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
 
 .content-filter label {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   font-size: 13px;
-  color: #cbd5e1;
+  color: #94a3b8;
   cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  white-space: nowrap;
 }
 
-/* checkbox itself */
-
-.content-filter input[type="checkbox"] {
-  accent-color: #22d3ee;
-  cursor: pointer;
+.content-filter label:hover {
+  background: rgba(167, 139, 250, 0.08);
+  color: #c4b5fd;
 }
 
-/* buttons */
+.content-filter input[type="radio"] {
+  accent-color: #a855f7;
+  cursor: pointer;
+  width: 13px;
+  height: 13px;
+}
 
-.content-filter button {
-  background: rgba(148, 163, 184, 0.06);
-  color: #e2e8f0;
-  border: 1px solid rgba(148, 163, 184, 0.08);
+.content-filter label:has(input[type="radio"]:checked) {
+  color: #a855f7;
+  background: rgba(168, 85, 247, 0.1);
+  border-color: rgba(168, 85, 247, 0.25);
+}
+
+/* Placeholder */
+.content-filter input::placeholder {
+  color: #6b5f8a;
+}
+
+/* Action buttons */
+.filter-actions {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.content-filter button.filter-apply {
+  background: linear-gradient(120deg, #a855f7, #7c3aed);
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 4px 14px rgba(168, 85, 247, 0.3);
+  white-space: nowrap;
+}
+
+.content-filter button.filter-apply:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.45);
+}
+
+.content-filter button.filter-reset,
+.content-filter button.filter-clear {
+  background: rgba(167, 139, 250, 0.07);
+  color: #94a3b8;
+  border: 1px solid rgba(167, 139, 250, 0.14);
   padding: 8px 14px;
   border-radius: 8px;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
 }
 
-.content-filter button:hover {
-  background: rgba(148, 163, 184, 0.12);
+.content-filter button.filter-reset:hover,
+.content-filter button.filter-clear:hover {
+  background: rgba(167, 139, 250, 0.13);
+  color: #c4b5fd;
 }
 
-/* small screens */
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .content-filter {
+    gap: 8px;
+    padding: 12px 14px;
+  }
+
+  .filter-divider {
+    display: none;
+  }
+}
 
 @media (max-width: 600px) {
   .content-filter {
+    flex-direction: column;
+    align-items: stretch;
     gap: 8px;
   }
 
-  .content-filter input[type="text"] {
+  .filter-search,
+  .filter-search input[type="text"] {
     width: 100%;
+    flex: none;
+  }
+
+  .filter-date-group {
+    width: 100%;
+  }
+
+  .filter-date-group input[type="date"] {
+    flex: 1;
+  }
+
+  .content-filter select {
+    width: 100%;
+  }
+
+  .filter-radio-group {
+    width: 100%;
+    gap: 4px;
+  }
+
+  .content-filter label {
+    flex: 1;
+    justify-content: center;
+    font-size: 12px;
+    padding: 7px 8px;
+  }
+
+  .filter-actions {
+    width: 100%;
+    margin-left: 0;
+    gap: 8px;
+  }
+
+  .content-filter button.filter-apply,
+  .content-filter button.filter-reset,
+  .content-filter button.filter-clear {
+    flex: 1;
+    text-align: center;
+    padding: 10px 12px;
   }
 }

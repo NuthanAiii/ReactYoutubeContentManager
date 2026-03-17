@@ -2,14 +2,15 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
-  border-bottom: 1px solid rgba(148, 163, 184, 0.15);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(145deg, rgba(28, 18, 55, 0.97), rgba(18, 12, 35, 0.97));
+  border-bottom: 1px solid rgba(167, 139, 250, 0.12);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
 }
 
 .header-container {
-  
+  max-width: 1400px;
+  margin: 0 auto;
   padding: 16px 24px;
   display: flex;
   align-items: center;
@@ -21,7 +22,7 @@
   font-weight: 700;
   color: #f8fafc;
   margin: 0;
-  background: linear-gradient(120deg, #22d3ee, #0ea5e9);
+  background: linear-gradient(120deg, #a855f7, #7c3aed);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -33,6 +34,31 @@
   cursor: pointer;
 }
 
+/* Brand */
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-app-logo {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.45));
+}
+
+.header-logo-text {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  background: linear-gradient(90deg, #e2e8f0 0%, #c4b5fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 /* Profile / dropdown */
 .profile {
   position: relative;
@@ -41,8 +67,8 @@
 }
 
 .profile-button {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(148,163,184,0.08);
+  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(167, 139, 250, 0.15);
   width: 40px;
   height: 40px;
   border-radius: 9999px;
@@ -51,29 +77,42 @@
   justify-content: center;
   cursor: pointer;
   padding: 6px;
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.profile-button:hover {
+  background: rgba(168, 85, 247, 0.14);
+  border-color: rgba(168, 85, 247, 0.35);
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.2);
 }
 
 .profile-button:focus {
-  outline: 2px solid rgba(34,211,238,0.25);
+  outline: 2px solid rgba(168, 85, 247, 0.35);
 }
 
 .avatar {
   width: 20px;
   height: 20px;
-  fill: #e2e8f0;
+  fill: #c4b5fd;
 }
 
 .profile-dropdown {
   position: absolute;
   right: 0;
   top: calc(100% + 10px);
-  background: rgba(15,23,42,0.95);
-  border: 1px solid rgba(148,163,184,0.08);
-  border-radius: 8px;
-  padding: 8px;
-  min-width: 150px;
-  box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+  background: rgba(18, 12, 35, 0.98);
+  border: 1px solid rgba(167, 139, 250, 0.14);
+  border-radius: 10px;
+  padding: 6px;
+  min-width: 160px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
   z-index: 40;
+  animation: dropdownFade 0.15s ease;
+}
+
+@keyframes dropdownFade {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .dropdown-item {
@@ -87,59 +126,13 @@
   font-weight: 600;
   cursor: pointer;
   border-radius: 6px;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .dropdown-item:hover {
-  background: rgba(34,211,238,0.06);
-  color: #22d3ee;
+  background: rgba(168, 85, 247, 0.1);
+  color: #c084fc;
 }
-.header-brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* logo image */
-
-.header-app-logo {
-  width: 34px;
-  height: 34px;
-  object-fit: contain;
-  filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.35));
-}
-
-/* gradient + slight 3D look */
-
-.header-logo-text {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-
-  /* simple elegant two-shade gradient */
-  background: linear-gradient(
-    90deg,
-    #e2e8f0 0%,
-    #94a3b8 100%
-  );
-
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-
-  /* very subtle depth only */
-  text-shadow: 0 1px 0 rgba(0,0,0,0.25);
-}
-
-
-
-
-@media (max-width: 480px) {
-  .profile-button {
-    width: 36px;
-    height: 36px;
-  }
-}
-
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
@@ -160,5 +153,10 @@
   .header-logo {
     font-size: 16px;
     letter-spacing: -0.01em;
+  }
+
+  .profile-button {
+    width: 36px;
+    height: 36px;
   }
 }
