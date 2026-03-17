@@ -8,7 +8,7 @@ from datetime import date
 from routers.outh2 import get_current_user
 from typing import Optional, List
 from ragimp.contentrag import text_splitter, embeddings, llm
-from sklearn.metrics.pairwise import cosine_similarity
+from sqlalchemy import text
 router = APIRouter(tags=['content'])
 
 @router.post('/getContent', response_model=schemas.fetchContetOnPageReq)
@@ -68,8 +68,8 @@ def setContent(req: schemas.Content, db: Session = Depends(get_db), user: schema
     db.flush()  # get new_content.id without committing yet
 
     try:
-        text = "\n".join([f"{k}:{v}" for k, v in {**req.model_dump(), "user_id": user_id}.items()])
-        chunks = text_splitter.split_text(text)
+        content_text = "\n".join([f"{k}:{v}" for k, v in {**req.model_dump(), "user_id": user_id}.items()])
+        chunks = text_splitter.split_text(content_text)
         vectors = embeddings.embed_documents(chunks)
         for chunk, vector in zip(chunks, vectors):
             new_vector = models.VectorDB(content_id=new_content.id, user_id=user_id, chunk_text=chunk, embedding=vector)
@@ -109,8 +109,8 @@ def updateContent(req: schemas.GetContent, db: Session = Depends(get_db), user: 
     content = data.filter(models.Data.id == req.id).first()
     if content:
         try:
-            text = "\n".join([f"{k}:{v}" for k, v in {**req.model_dump(), "user_id": user_id}.items()])
-            chunks = text_splitter.split_text(text)
+            content_text = "\n".join([f"{k}:{v}" for k, v in {**req.model_dump(), "user_id": user_id}.items()])
+            chunks = text_splitter.split_text(content_text)
             vectors = embeddings.embed_documents(chunks)
 
             # only delete old vectors after new ones are successfully generated
@@ -140,11 +140,12 @@ def askQuestion(req: schemas.askQuestionReq, db: Session = Depends(get_db), user
     try:
         question = req.question
         question_vector = embeddings.embed_query(question)
-        vecData = db.query(models.VectorDB).filter(models.VectorDB.user_id == user_id).all()
-        
-        top_matches = sorted(vecData, key=lambda v:cosine_similarity([question_vector], [v.embedding])[0][0], reverse=True)[:5]
+        top_matches = db.execute(
+            text('SELECT chunk_text FROM "Vectors" WHERE user_id = :user_id ORDER BY embedding <=> CAST(:vec AS vector) LIMIT 5'),
+            {"user_id": user_id, "vec": str(question_vector)}
+        ).fetchall()
         if len(top_matches) > 0:
-            context = "\n".join([f"{match.chunk_text}" for match in top_matches])
+            context = "\n".join([row.chunk_text for row in top_matches])
             prompt = f"""You are a helpful AI assistant.
 
 Answer the question ONLY using the context provided below.
