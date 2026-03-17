@@ -76,3 +76,6 @@ class TokenData(BaseModel):
 class changePasswordReq(BaseModel):
     email: str
     new_password: str
+
+class askQuestionReq(BaseModel):
+    question: str

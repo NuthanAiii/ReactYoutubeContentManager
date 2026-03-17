@@ -7,8 +7,8 @@ from fastapi import Query
 from datetime import date
 from routers.outh2 import get_current_user
 from typing import Optional, List
-from ragimp.contentrag import text_splitter, embeddings
-
+from ragimp.contentrag import text_splitter, embeddings, llm
+from sklearn.metrics.pairwise import cosine_similarity
 router = APIRouter(tags=['content'])
 
 @router.post('/getContent', response_model=schemas.fetchContetOnPageReq)
@@ -132,3 +132,42 @@ def updateContent(req: schemas.GetContent, db: Session = Depends(get_db), user: 
         return content
     else:
         return {"message": "Content not found"}
+
+@router.post("/ask")
+def askQuestion(req: schemas.askQuestionReq, db: Session = Depends(get_db), user: schemas.GetUser = Depends(get_current_user)):
+    user_id = user.id
+
+    try:
+        question = req.question
+        question_vector = embeddings.embed_query(question)
+        vecData = db.query(models.VectorDB).filter(models.VectorDB.user_id == user_id).all()
+        
+        top_matches = sorted(vecData, key=lambda v:cosine_similarity([question_vector], [v.embedding])[0][0], reverse=True)[:5]
+        if len(top_matches) > 0:
+            context = "\n".join([f"{match.chunk_text}" for match in top_matches])
+            prompt = f"""You are a helpful AI assistant.
+
+Answer the question ONLY using the context provided below.
+
+Rules:
+- Do NOT make up information
+- If the answer is not in the context, say: "I don't know"
+- Keep the answer clear and concise
+- If possible, include exact values (like dates, numbers)
+
+Context:
+{context}
+
+Question:
+{question}
+
+Answer:
+"""
+            answer = llm.invoke(prompt)
+            return {"answer": answer.strip()}            
+        else:
+            return {"answer": "No relevant content found"}
+    except Exception as e:
+        raise HTTPException(status_code=503, detail=f"Question answering failed: {str(e)}") 
+
+

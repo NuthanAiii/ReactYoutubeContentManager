@@ -18,3 +18,4 @@ tiktoken
 pgvector
 python-dotenv
 faiss-cpu
+scikit-learn
