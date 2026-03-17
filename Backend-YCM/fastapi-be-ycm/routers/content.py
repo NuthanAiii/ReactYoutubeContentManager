@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 import schemas
 import models
 from database import get_db
@@ -18,10 +18,10 @@ router = APIRouter(tags=['content'])
 # and here we have introduced search request body to filter the content based on certain criteria
 def getContent(req: Optional[schemas.searchContentReq] = None,skip: int = Query(0, ge=0),
     limit: int = Query(10, ge=1, le=40), db: Session = Depends(get_db), user: schemas.GetUser = Depends(get_current_user)):
-    
+
     user_id = user.id
     data= db.query(models.Data).filter(models.Data.user_id == user_id) # here we are filtering the content based on user id, so that user can only see his content
-    
+
     if req:
         if req.from_date:
             data = data.filter(models.Data.publishDate >= req.from_date)
@@ -36,7 +36,7 @@ def getContent(req: Optional[schemas.searchContentReq] = None,skip: int = Query(
             )
         if req.status == 'uploaded':
             data = data.filter(models.Data.uploaded.is_(True))
-       
+
 
         elif req.status == 'scheduled':
             data = data.filter(
@@ -49,7 +49,7 @@ def getContent(req: Optional[schemas.searchContentReq] = None,skip: int = Query(
                 models.Data.publishDate < date.today(),
                 models.Data.uploaded.is_(False)
             )
-    
+
     content = data.order_by(models.Data.id.desc()).offset(skip).limit(limit).all()
     total = data.count()
     page = (skip // limit) + 1
@@ -57,29 +57,34 @@ def getContent(req: Optional[schemas.searchContentReq] = None,skip: int = Query(
 
 
 @router.post("/setContent")
-def setContent(req: schemas.Content, db: Session = Depends(get_db), user: schemas.GetUser = Depends(get_current_user) ):
+def setContent(req: schemas.Content, db: Session = Depends(get_db), user: schemas.GetUser = Depends(get_current_user)):
     user_id = user.id
-    
+
     new_content = models.Data(
         **req.model_dump(),
         user_id=user_id
     )
     db.add(new_content)
-    db.commit()
-    db.refresh(new_content)
-    text = "\n".join([f"{k}:{v}" for k,v in {**req.model_dump(), "user_id": user_id}.items()])
-    chunks = text_splitter.split_text(text)
-    vectors = embeddings.embed_documents(chunks)
-   
-    for chunk, vector in zip(chunks, vectors):
-        new_vector = models.VectorDB(content_id=new_content.id, user_id=user_id, chunk_text=chunk, embedding=vector)
-        db.add(new_vector)
-    db.commit()
-    
-    
+    db.flush()  # get new_content.id without committing yet
+
+    try:
+        text = "\n".join([f"{k}:{v}" for k, v in {**req.model_dump(), "user_id": user_id}.items()])
+        chunks = text_splitter.split_text(text)
+        vectors = embeddings.embed_documents(chunks)
+        for chunk, vector in zip(chunks, vectors):
+            new_vector = models.VectorDB(content_id=new_content.id, user_id=user_id, chunk_text=chunk, embedding=vector)
+            db.add(new_vector)
+        db.commit()
+        db.refresh(new_content)
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=503, detail=f"Embedding failed, content not saved: {str(e)}")
+
     return new_content
+
+
 @router.post("/deleteContent")
-def deleteContent(req: schemas.deleteContentReq, db: Session = Depends(get_db), user: schemas.GetUser = Depends(get_current_user) ):
+def deleteContent(req: schemas.deleteContentReq, db: Session = Depends(get_db), user: schemas.GetUser = Depends(get_current_user)):
     user_id = user.id
     data = db.query(models.Data).filter(models.Data.user_id == user_id)
     content = data.filter(models.Data.id == req.id).first()
@@ -94,23 +99,32 @@ def deleteContent(req: schemas.deleteContentReq, db: Session = Depends(get_db), 
     else:
         return {"message": "Content not found"}
 
+
 @router.post("/updateContent")
-def updateContent(req: schemas.GetContent, db: Session = Depends(get_db), user: schemas.GetUser = Depends(get_current_user) ):
+def updateContent(req: schemas.GetContent, db: Session = Depends(get_db), user: schemas.GetUser = Depends(get_current_user)):
     user_id = user.id
     data = db.query(models.Data).filter(models.Data.user_id == user_id)
     vecData = db.query(models.VectorDB).filter(models.VectorDB.user_id == user_id)
 
     content = data.filter(models.Data.id == req.id).first()
     if content:
-        vecContent = vecData.filter(models.VectorDB.content_id == req.id).all()
-        for vec in vecContent:
-            db.delete(vec)
-        text = "\n".join([f"{k}:{v}" for k,v in {**req.model_dump(),"user_id":user_id}.items()])
-        chunks = text_splitter.split_text(text)
-        vectors = embeddings.embed_documents(chunks)
-        for chunk, vector in zip(chunks,vectors):
-            new_vector = models.VectorDB(content_id=req.id, user_id=user_id, chunk_text=chunk, embedding=vector)
-            db.add(new_vector)
+        try:
+            text = "\n".join([f"{k}:{v}" for k, v in {**req.model_dump(), "user_id": user_id}.items()])
+            chunks = text_splitter.split_text(text)
+            vectors = embeddings.embed_documents(chunks)
+
+            # only delete old vectors after new ones are successfully generated
+            vecContent = vecData.filter(models.VectorDB.content_id == req.id).all()
+            for vec in vecContent:
+                db.delete(vec)
+
+            for chunk, vector in zip(chunks, vectors):
+                new_vector = models.VectorDB(content_id=req.id, user_id=user_id, chunk_text=chunk, embedding=vector)
+                db.add(new_vector)
+        except Exception as e:
+            db.rollback()
+            raise HTTPException(status_code=503, detail=f"Embedding failed, content not updated: {str(e)}")
+
         for key, value in req.model_dump().items():
             setattr(content, key, value)
         db.commit()
