@@ -9,7 +9,13 @@ load_dotenv()
 #if we get database url from environment variable then we use that otherwise we use sqlite database
 DATABASE_URL = os.getenv("DATABASE_URL")  # Set the environment variable for the database URL
 
-engine = create_engine(DATABASE_URL)
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True,       # test connection before using it, reconnects if dropped
+    pool_recycle=300,         # recycle connections every 5 minutes to avoid stale SSL
+    pool_size=5,
+    max_overflow=10,
+)
 # engine is used to create the connection to the database
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
