@@ -157,15 +157,15 @@ def askQuestion(req: schemas.askQuestionReq, db: Session = Depends(get_db), user
         ).fetchall()
         if len(top_matches) > 0:
             context = "\n".join([row.chunk_text for row in top_matches])
-            prompt = f"""You are a helpful AI assistant.
+            prompt = f"""You are a helpful AI assistant for a YouTube content creator.
 
-Answer the question ONLY using the context provided below.
+You have access to the creator's existing content below. Use it to answer questions, give suggestions, and provide creative ideas.
 
 Rules:
-- Do NOT make up information
-- If the answer is not in the context, say: "I don't know"
-- Keep the answer clear and concise
-- If possible, include exact values (like dates, numbers)
+- For factual questions (dates, titles, descriptions), answer directly from the context
+- For creative questions (topic suggestions, ideas, improvements), use the context as inspiration and think creatively
+- Keep answers clear and concise
+- Do NOT make up facts about existing content that aren't in the context
 
 Context:
 {context}
@@ -179,7 +179,17 @@ Answer:
             answer_text = answer.content if hasattr(answer, "content") else str(answer)
             return {"answer": answer_text.strip()}
         else:
-            return {"answer": "No relevant content found"}
+            fallback_prompt = f"""You are a helpful AI assistant for a YouTube content creator.
+You help with content ideas, scripting, scheduling, and strategy.
+Respond naturally to the user's message.
+
+Message: {question}
+
+Answer:
+"""
+            answer = llm.invoke(fallback_prompt)
+            answer_text = answer.content if hasattr(answer, "content") else str(answer)
+            return {"answer": answer_text.strip()}
     except Exception as e:
         raise HTTPException(status_code=503, detail=f"Question answering failed: {str(e)}") 
 

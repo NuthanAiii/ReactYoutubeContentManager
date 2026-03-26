@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import {
     MainContainer,
     ChatContainer,
@@ -14,16 +14,6 @@ import * as apiCallSerive from '../services/apiCallSerive'
 
 const ChatWindow = ({ onClose }) => {
     const windowRef = useRef(null)
-
-    useEffect(() => {
-        const handleClickOutside = (e) => {
-            if (windowRef.current && !windowRef.current.contains(e.target)) {
-                onClose()
-            }
-        }
-        document.addEventListener('mousedown', handleClickOutside)
-        return () => document.removeEventListener('mousedown', handleClickOutside)
-    }, [onClose])
 
     const [messages, setMessages] = useState([
         {
