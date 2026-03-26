@@ -81,6 +81,34 @@ This project is a YouTube Content Manager with a React frontend and a FastAPI ba
 
 ---
 
+## RAG System (AI Chat)
+- Located in `ragimp/contentrag.py`.
+- LLM: Google Gemini 2.5 Flash via LangChain.
+- Embeddings: Gemini `gemini-embedding-001` (3072 dimensions).
+- Vector storage: PostgreSQL with pgvector extension (`Vectors` table).
+- Text splitting: RecursiveCharacterTextSplitter (chunk_size=1000, overlap=200).
+- Write path: On setContent/updateContent → embed content → store in Vectors table.
+- Read path: /ask endpoint → embed question → cosine similarity search → top 5 chunks → Gemini LLM → answer.
+- Similarity threshold: 0.7 cosine distance (lower = more similar). Chunks beyond this are ignored.
+- Re-embedding on update: Only triggered if title, description, script, platform, type, or category changed.
+
+---
+
+## Changelog
+
+### 2026-03-26
+- Fixed /ask endpoint crash: `llm.invoke()` returns a LangChain AIMessage object, not a string.
+  Extracting `.content` before calling `.strip()` — file: routers/content.py
+- Fixed unnecessary re-embedding on updateContent: Added diff check on TEXT_FIELDS
+  (title, description, script, platform, type, category). Non-text fields like uploaded/publishDate
+  no longer trigger a Gemini API call — file: routers/content.py
+- Fixed missing similarity threshold in /ask SQL query: Added cosine distance filter
+  `< 0.7` so irrelevant chunks are excluded. Returns "No relevant content found" if nothing
+  qualifies instead of hallucinating an answer — file: routers/content.py
+
+---
+
 ## Author & Date
 - Notes created by GitHub Copilot
 - Date: 6 February 2026
+- Last updated: 26 March 2026
