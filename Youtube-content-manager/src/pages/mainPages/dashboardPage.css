@@ -243,15 +243,20 @@
   margin: 0;
 }
 
-/* ── FAB: Add Content ── */
-.add-content-button-container {
+/* ── FAB container ── */
+.fab-container {
   position: fixed;
   bottom: 32px;
   right: 32px;
   z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
+/* Add Content button — flex: 3 */
 .add-content-button {
+  flex: 3;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -266,6 +271,7 @@
   transition: all 0.2s ease;
   box-shadow: 0 12px 40px rgba(168, 85, 247, 0.4);
   backdrop-filter: blur(10px);
+  white-space: nowrap;
 }
 
 .add-content-button:hover {
@@ -289,6 +295,35 @@
   height: 24px;
   background: rgba(255, 255, 255, 0.15);
   border-radius: 50%;
+}
+
+/* Chat FAB button — flex: 1 */
+.chat-fab-button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(120deg, #a855f7, #7c3aed);
+  color: #ffffff;
+  border: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 12px 40px rgba(168, 85, 247, 0.35);
+  backdrop-filter: blur(10px);
+  flex-shrink: 0;
+}
+
+.chat-fab-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 50px rgba(168, 85, 247, 0.55);
+}
+
+.chat-fab-button:active {
+  transform: translateY(0);
+  opacity: 0.9;
 }
 
 /* ── Empty State ── */
@@ -382,7 +417,7 @@
     font-size: 14px;
   }
 
-  .add-content-button-container {
+  .fab-container {
     bottom: 20px;
     right: 20px;
   }
@@ -449,7 +484,7 @@
     font-size: 13px;
   }
 
-  .add-content-button-container {
+  .fab-container {
     bottom: 16px;
     right: 16px;
   }

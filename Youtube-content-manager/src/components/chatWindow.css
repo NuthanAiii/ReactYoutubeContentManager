@@ -1,0 +1,190 @@
+/* ── Chat popup window ── */
+.chat-window {
+  position: fixed;
+  bottom: 100px;
+  right: 32px;
+  width: 360px;
+  height: 500px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(168, 85, 247, 0.2);
+  animation: chatSlideUp 0.25s ease;
+}
+
+@keyframes chatSlideUp {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Header ── */
+.chat-window-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: linear-gradient(120deg, #a855f7, #7c3aed);
+  flex-shrink: 0;
+}
+
+.chat-window-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+  letter-spacing: 0.01em;
+}
+
+.chat-window-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e9d5ff;
+  box-shadow: 0 0 6px #c084fc;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+.chat-window-close {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+
+.chat-window-close:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+/* ── Body ── */
+.chat-window-body {
+  flex: 1;
+  overflow: hidden;
+  background: #0a0614;
+}
+
+.chat-window-body .cs-main-container {
+  height: 100%;
+  border: none !important;
+  background: transparent !important;
+}
+
+.chat-window-body .cs-chat-container {
+  background: transparent !important;
+}
+
+/* Message list */
+.chat-window-body .cs-message-list {
+  background: #0a0614 !important;
+  padding: 12px 10px !important;
+}
+
+.chat-window-body .cs-message-list__scroll-wrapper {
+  padding: 0 !important;
+}
+
+/* Incoming (bot) messages */
+.chat-window-body .cs-message--incoming .cs-message__content {
+  background: rgba(124, 58, 237, 0.15) !important;
+  color: #e2e8f0 !important;
+  border: 1px solid rgba(168, 85, 247, 0.2) !important;
+  border-radius: 4px 14px 14px 14px !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+}
+
+/* Outgoing (user) messages */
+.chat-window-body .cs-message--outgoing .cs-message__content {
+  background: linear-gradient(120deg, #a855f7, #7c3aed) !important;
+  color: #fff !important;
+  border-radius: 14px 4px 14px 14px !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3) !important;
+}
+
+/* Avatar hide */
+.chat-window-body .cs-message__avatar {
+  display: none !important;
+}
+
+/* Typing indicator */
+.chat-window-body .cs-typing-indicator {
+  background: #0a0614 !important;
+  color: #94a3b8 !important;
+  font-size: 12px !important;
+  padding: 6px 14px !important;
+}
+
+.chat-window-body .cs-typing-indicator__dot {
+  background: #a855f7 !important;
+}
+
+/* Message input */
+.chat-window-body .cs-message-input {
+  background: #0f0a1e !important;
+  border-top: 1px solid rgba(168, 85, 247, 0.15) !important;
+  padding: 10px 12px !important;
+}
+
+.chat-window-body .cs-message-input__content-editor-wrapper {
+  background: rgba(167, 139, 250, 0.06) !important;
+  border: 1px solid rgba(168, 85, 247, 0.2) !important;
+  border-radius: 10px !important;
+  padding: 2px 4px !important;
+}
+
+.chat-window-body .cs-message-input__content-editor,
+.chat-window-body .cs-message-input__content-editor-container,
+.chat-window-body div[contenteditable] {
+  background: transparent !important;
+  color: #e2e8f0 !important;
+  caret-color: #a855f7 !important;
+  font-size: 13px !important;
+  font-family: inherit !important;
+  -webkit-text-fill-color: #e2e8f0 !important;
+}
+
+.chat-window-body .cs-message-input__content-editor:empty::before,
+.chat-window-body div[contenteditable]:empty::before,
+.chat-window-body .cs-message-input__content-editor[data-placeholder]::before {
+  color: #6b5f8a !important;
+  -webkit-text-fill-color: #6b5f8a !important;
+}
+
+/* Send button */
+.chat-window-body .cs-button--send {
+  color: #a855f7 !important;
+  transition: color 0.15s ease !important;
+}
+
+.chat-window-body .cs-button--send:hover {
+  color: #c084fc !important;
+}
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  .chat-window {
+    right: 16px;
+    left: 16px;
+    width: auto;
+    bottom: 90px;
+    height: 420px;
+  }
+}

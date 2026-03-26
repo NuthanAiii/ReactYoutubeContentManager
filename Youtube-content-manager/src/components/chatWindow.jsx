@@ -1,0 +1,81 @@
+import React, { useState, useEffect, useRef } from 'react'
+import {
+    MainContainer,
+    ChatContainer,
+    MessageList,
+    Message,
+    MessageInput,
+    TypingIndicator,
+} from '@chatscope/chat-ui-kit-react'
+import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css'
+import './chatWindow.css'
+
+const ChatWindow = ({ onClose }) => {
+    const windowRef = useRef(null)
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (windowRef.current && !windowRef.current.contains(e.target)) {
+                onClose()
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => document.removeEventListener('mousedown', handleClickOutside)
+    }, [onClose])
+
+    const [messages, setMessages] = useState([
+        {
+            message: "Hi! I'm your content assistant. Ask me anything about your YouTube content strategy.",
+            sender: 'bot',
+            direction: 'incoming',
+        }
+    ])
+    const [isTyping, setIsTyping] = useState(false)
+
+    const handleSend = async (text) => {
+        const userMsg = { message: text, sender: 'user', direction: 'outgoing' }
+        setMessages(prev => [...prev, userMsg])
+        setIsTyping(true)
+
+        // TODO: replace with your actual API call
+        // const res = await apiCallSerive.fetchData('chat', { message: text })
+        setTimeout(() => {
+            setMessages(prev => [
+                ...prev,
+                { message: "I'm still being set up! Connect me to your backend to get real responses.", sender: 'bot', direction: 'incoming' }
+            ])
+            setIsTyping(false)
+        }, 1200)
+    }
+
+    return (
+        <div className="chat-window" ref={windowRef}>
+            <div className="chat-window-header">
+                <div className="chat-window-title">
+                    <span className="chat-window-dot" />
+                    Content Assistant
+                </div>
+                <button className="chat-window-close" onClick={onClose} aria-label="Close chat">✕</button>
+            </div>
+
+            <div className="chat-window-body">
+                <MainContainer>
+                    <ChatContainer>
+                        <MessageList typingIndicator={isTyping ? <TypingIndicator content="Thinking…" /> : null}>
+                            {messages.map((msg, i) => (
+                                <Message key={i} model={msg} />
+                            ))}
+                        </MessageList>
+                        <MessageInput
+                            placeholder="Ask something…"
+                            onSend={handleSend}
+                            attachButton={false}
+                        />
+                    </ChatContainer>
+                </MainContainer>
+            </div>
+        </div>
+    )
+}
+
+export default ChatWindow
