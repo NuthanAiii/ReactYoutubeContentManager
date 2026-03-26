@@ -106,24 +106,34 @@ def updateContent(req: schemas.GetContent, db: Session = Depends(get_db), user: 
     data = db.query(models.Data).filter(models.Data.user_id == user_id)
     vecData = db.query(models.VectorDB).filter(models.VectorDB.user_id == user_id)
 
+    TEXT_FIELDS = {"title", "description", "script", "platform", "type", "category"}
+
     content = data.filter(models.Data.id == req.id).first()
     if content:
-        try:
-            content_text = "\n".join([f"{k}:{v}" for k, v in {**req.model_dump(), "user_id": user_id}.items()])
-            chunks = text_splitter.split_text(content_text)
-            vectors = embeddings.embed_documents(chunks)
+        # check if any text field that affects meaning has actually changed
+        req_data = req.model_dump()
+        text_changed = any(
+            str(req_data.get(field)) != str(getattr(content, field, ""))
+            for field in TEXT_FIELDS
+        )
 
-            # only delete old vectors after new ones are successfully generated
-            vecContent = vecData.filter(models.VectorDB.content_id == req.id).all()
-            for vec in vecContent:
-                db.delete(vec)
+        if text_changed:
+            try:
+                content_text = "\n".join([f"{k}:{v}" for k, v in {**req_data, "user_id": user_id}.items()])
+                chunks = text_splitter.split_text(content_text)
+                vectors = embeddings.embed_documents(chunks)
 
-            for chunk, vector in zip(chunks, vectors):
-                new_vector = models.VectorDB(content_id=req.id, user_id=user_id, chunk_text=chunk, embedding=vector)
-                db.add(new_vector)
-        except Exception as e:
-            db.rollback()
-            raise HTTPException(status_code=503, detail=f"Embedding failed, content not updated: {str(e)}")
+                # only delete old vectors after new ones are successfully generated
+                vecContent = vecData.filter(models.VectorDB.content_id == req.id).all()
+                for vec in vecContent:
+                    db.delete(vec)
+
+                for chunk, vector in zip(chunks, vectors):
+                    new_vector = models.VectorDB(content_id=req.id, user_id=user_id, chunk_text=chunk, embedding=vector)
+                    db.add(new_vector)
+            except Exception as e:
+                db.rollback()
+                raise HTTPException(status_code=503, detail=f"Embedding failed, content not updated: {str(e)}")
 
         for key, value in req.model_dump().items():
             setattr(content, key, value)
@@ -139,10 +149,11 @@ def askQuestion(req: schemas.askQuestionReq, db: Session = Depends(get_db), user
 
     try:
         question = req.question
+        SIMILARITY_THRESHOLD = 0.7  # cosine distance: 0=identical, 1=orthogonal, 2=opposite
         question_vector = embeddings.embed_query(question)
         top_matches = db.execute(
-            text('SELECT chunk_text FROM "Vectors" WHERE user_id = :user_id ORDER BY embedding <=> CAST(:vec AS vector) LIMIT 5'),
-            {"user_id": user_id, "vec": str(question_vector)}
+            text('SELECT chunk_text FROM "Vectors" WHERE user_id = :user_id AND (embedding <=> CAST(:vec AS vector)) < :threshold ORDER BY embedding <=> CAST(:vec AS vector) LIMIT 5'),
+            {"user_id": user_id, "vec": str(question_vector), "threshold": SIMILARITY_THRESHOLD}
         ).fetchall()
         if len(top_matches) > 0:
             context = "\n".join([row.chunk_text for row in top_matches])
@@ -165,7 +176,8 @@ Question:
 Answer:
 """
             answer = llm.invoke(prompt)
-            return {"answer": answer.strip()}            
+            answer_text = answer.content if hasattr(answer, "content") else str(answer)
+            return {"answer": answer_text.strip()}
         else:
             return {"answer": "No relevant content found"}
     except Exception as e:
