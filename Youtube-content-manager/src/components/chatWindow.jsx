@@ -9,6 +9,8 @@ import {
 } from '@chatscope/chat-ui-kit-react'
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css'
 import './chatWindow.css'
+import { set } from 'react-hook-form'
+import * as apiCallSerive from '../services/apiCallSerive'
 
 const ChatWindow = ({ onClose }) => {
     const windowRef = useRef(null)
@@ -36,16 +38,11 @@ const ChatWindow = ({ onClose }) => {
         const userMsg = { message: text, sender: 'user', direction: 'outgoing' }
         setMessages(prev => [...prev, userMsg])
         setIsTyping(true)
-
+        const res = await apiCallSerive.getBotresponce('ask', { question: text })
         // TODO: replace with your actual API call
         // const res = await apiCallSerive.fetchData('chat', { message: text })
-        setTimeout(() => {
-            setMessages(prev => [
-                ...prev,
-                { message: "I'm still being set up! Connect me to your backend to get real responses.", sender: 'bot', direction: 'incoming' }
-            ])
-            setIsTyping(false)
-        }, 1200)
+        setMessages(prev => [...prev, { message: res.answer, sender: 'bot', direction: 'incoming' }])
+        setIsTyping(false)
     }
 
     return (
