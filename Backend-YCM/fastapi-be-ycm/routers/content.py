@@ -68,10 +68,10 @@ def setContent(req: schemas.Content, db: Session = Depends(get_db), user: schema
     db.flush()  # get new_content.id without committing yet
 
     try:
-        content_text = "\n".join([f"{k}:{v}" for k, v in {**req.model_dump(), "user_id": user_id}.items()])
+        content_text = "\n".join([f"{k}:{v}" for k, v in {**req.model_dump(), "user_id": user_id}.items()])# here output wiil be like ["title:My Title", "description:My Description", "script:My Script", ...]
         chunks = text_splitter.split_text(content_text)
         vectors = embeddings.embed_documents(chunks)
-        for chunk, vector in zip(chunks, vectors):
+        for chunk, vector in zip(chunks, vectors): # zip will give like [(chunk1, vector1), (chunk2, vector2), ...]
             new_vector = models.VectorDB(content_id=new_content.id, user_id=user_id, chunk_text=chunk, embedding=vector)
             db.add(new_vector)
         db.commit()
