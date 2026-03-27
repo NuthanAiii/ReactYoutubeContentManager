@@ -28,7 +28,7 @@ const ChatWindow = ({ onClose }) => {
         setMessages(prev => [...prev, userMsg])
         setIsTyping(true)
         try {
-            console.log('fn:', apiCallSerive.getBotresponce)
+            
             const res = await apiCallSerive.getBotresponce('ask', { question: text })
             setMessages(prev => [...prev, { message: res.answer, sender: 'bot', direction: 'incoming' }])
         } catch (e) {

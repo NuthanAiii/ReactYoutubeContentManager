@@ -81,6 +81,19 @@ export const postData = async (endpoint, data) => {
   }
 };
 
+export const getBotresponce = async (endpoint, data) =>{
+  
+  try{
+    const headers = createConfig(data);
+    const responce = await api.post(endpoint, data, { headers });
+    return responce.data;
+
+
+  } catch(error){
+    throw error;
+  }
+
+}
 
 
 
