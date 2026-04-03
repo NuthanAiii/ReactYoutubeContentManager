@@ -1,10 +1,8 @@
-import React from 'react';
-import { set, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import './forgotPassword.css';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import * as apiCallSerive from '../services/apiCallSerive';
-import { useState } from 'react';
 
 
 const ForgotPassword = ({setLoading}) => {
@@ -17,20 +15,20 @@ const ForgotPassword = ({setLoading}) => {
     } = useForm({
         mode: 'onChange',
         defaultValues: {
+            email: '',
+            oldPassword: '',
             newPassword: '',
             confirmPassword: ''
         }
     });
  const navigate = useNavigate();
     const newPassword = watch('newPassword');
-    const confirmPassword = watch('confirmPassword');
 
     const onSubmit = async(data) => {
         setLoading(true);
-        
-            // onSave(data.newPassword)
             const payload = {
                 email: data.email,
+                old_password: data.oldPassword,
                 new_password: data.newPassword
             }
             try{
@@ -48,18 +46,12 @@ const ForgotPassword = ({setLoading}) => {
                 reset();
                 return;
             }
-            
-           
-            
-            
-
-        
     };
 
     return (
         <div className="forgot-password-container">
             <form className="forgot-password-form" onSubmit={handleSubmit(onSubmit)}>
-                <h2>Forgot Password</h2>
+                <h2>Change Password</h2>
                 <div className="form-group">
                     <label htmlFor="email">Email</label>
                     <input
@@ -77,6 +69,21 @@ const ForgotPassword = ({setLoading}) => {
                     />
                     {touchedFields.email && errors.email && (
                         <span className="error-message">{errors.email.message}</span>
+                    )}
+                </div>
+                <div className="form-group">
+                    <label htmlFor="oldPassword">Current Password</label>
+                    <input
+                        type="password"
+                        id="oldPassword"
+                        placeholder="Enter current password"
+                        {...register('oldPassword', {
+                            required: 'Current password is required'
+                        })}
+                        className={touchedFields.oldPassword && errors.oldPassword ? 'input-error' : ''}
+                    />
+                    {touchedFields.oldPassword && errors.oldPassword && (
+                        <span className="error-message">{errors.oldPassword.message}</span>
                     )}
                 </div>
                 <div className="form-group">

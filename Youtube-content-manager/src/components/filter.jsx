@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -175,7 +175,7 @@ const ContentFilter = ({ onApply }) => {
                                     <span>Scheduled</span>
                                 </label>
                                 <label>
-                                    <input type="radio" value="overDue" {...register('status')} />
+                                    <input type="radio" value="overdue" {...register('status')} />
                                     <span>Overdue</span>
                                 </label>
                             </div>

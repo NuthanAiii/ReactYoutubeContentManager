@@ -1,16 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './header.css'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { useSelector,useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { logOut } from '../slices/authSlice'
-import logo from '../assets/logo.png'
 
 const Header = () => {
   const [open, setOpen] = useState(false)
   const dispatch = useDispatch()
-  const user = useSelector((state) => state.login.userDetails)
-  const ref = useRef(null)
+const ref = useRef(null)
   const navigate = useNavigate()
 
   const handleLogout = () => {
@@ -40,7 +38,6 @@ const Header = () => {
     <header className="header">
       <div className="header-container">
        <div className="header-brand">
-  <img src={logo} alt="App logo" className="header-app-logo" />
   <h1 className="header-logo-text">Media Content Manager</h1>
 </div>
       

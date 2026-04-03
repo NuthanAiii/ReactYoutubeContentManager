@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom' 
+import { useNavigate } from 'react-router-dom'
 import './login.css'
 import * as apiCallSerive from '../../services/apiCallSerive';
 import { toast } from 'react-toastify';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { loginAsync } from '../../slices/authSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 
@@ -61,6 +61,7 @@ const LoginPage = ({ setLoading }) => {
                     const action = await dispatch(loginAsync({ username: data.userName, password: data.password }));
                     const result = unwrapResult(action);
                     sessionStorage.setItem('authToken', result.token);
+                    window.dispatchEvent(new Event('auth:login'));
                     toast.success('Login successful');
                     loginReset();
                     navigate('/dashboard', { replace: true });
@@ -199,7 +200,7 @@ const LoginPage = ({ setLoading }) => {
                             </button>
                         </p>
                     ) : null}
-                    <p className='hint'>{isSignUp ? 'Create your account to start managing content.' : 'Demo flow: click login to view the dashboard.'}</p>
+                    <p className='hint'>Create your account to start managing content.</p>
                 </div>
             </div>
         </div>

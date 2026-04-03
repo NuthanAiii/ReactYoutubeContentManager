@@ -11,7 +11,7 @@ export const loginAsync = createAsyncThunk(
       params.append('password', password);
       const res = await apiCallService.postData('login', params);
       // normalize token property name
-      const token = res?.access_token || res?.acess_token || res?.token || null;
+      const token = res?.access_token || res?.token || null;
       if (!token) {
         return rejectWithValue('No access token returned');
       }

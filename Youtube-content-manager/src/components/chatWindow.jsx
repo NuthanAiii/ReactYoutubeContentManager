@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import { useState, useRef } from 'react'
 import {
     MainContainer,
     ChatContainer,
@@ -16,7 +16,7 @@ const ChatWindow = ({ onClose }) => {
 
     const [messages, setMessages] = useState([
         {
-            message: "Hi! I'm your content assistant. Ask me anything about your YouTube content strategy.",
+            message: "Hi! I'm your content assistant. Ask me anything about your content strategy.",
             sender: 'bot',
             direction: 'incoming',
         }
@@ -28,11 +28,9 @@ const ChatWindow = ({ onClose }) => {
         setMessages(prev => [...prev, userMsg])
         setIsTyping(true)
         try {
-            
             const res = await apiCallSerive.getBotresponce('ask', { question: text })
             setMessages(prev => [...prev, { message: res.answer, sender: 'bot', direction: 'incoming' }])
         } catch (e) {
-            console.error('Bot error:', e)
             setMessages(prev => [...prev, { message: 'Something went wrong. Please try again.', sender: 'bot', direction: 'incoming' }])
         } finally {
             setIsTyping(false)

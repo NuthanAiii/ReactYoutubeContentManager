@@ -41,7 +41,8 @@ def changePassword(req: schemas.changePasswordReq, db:Session = Depends(get_db))
     user = db.query(models.User).filter(models.User.email == req.email).first()
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User Not Found!")
-    
+    if not Hash.verify(req.old_password, user.password):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect current password")
     user.password = Hash.hash(req.new_password)
     db.commit()
     return {"message": "Password changed successfully"}

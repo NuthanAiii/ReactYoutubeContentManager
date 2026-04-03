@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import './dashboardPage.css'
 import Header from '../../layouts/header'
 import Addcontent from './addContent'
 import DeleteAlert from '../../components/deleteAlert'
-import { toast } from 'react-toastify'
-import { fetchData } from '../../services/apiCallSerive'
 import * as apiCallSerive from '../../services/apiCallSerive';
 import Pagination from '../../components/pagination';
 import ContentFilter from '../../components/filter';
-import { get, set } from 'react-hook-form'
-import Loader from '../../components/loader'
 import ChatWindow from '../../components/chatWindow'
 const DashboardPage = ({ setLoading }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -100,7 +96,6 @@ const DashboardPage = ({ setLoading }) => {
             setLoading(false);
             setotalPages(Math.ceil(res.total / numberOfitemsPerPage));
 
-            console.log('Fetched content data:', res);
 
         } catch (error) {
                 setLoading(false);
@@ -163,7 +158,7 @@ const DashboardPage = ({ setLoading }) => {
                               </div>
                           )}
                           {item.uploaded && item.videoUrl && (
-                              <a className='link' href={item.videoUrl} target='_blank' rel='noreferrer'>View on YouTube →</a>
+                              <a className='link' href={item.videoUrl} target='_blank' rel='noreferrer'>Watch video →</a>
                           )}
                       </div>
                       <div className='card-actions'>
